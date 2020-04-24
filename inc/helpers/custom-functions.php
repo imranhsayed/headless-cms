@@ -33,13 +33,13 @@ function headless_cms_get_template_part( $slug, $variables = [] ) {
 /**
  * Register Menus.
  */
-function hw_custom_new_menu() {
+function hcms_custom_new_menu() {
 	register_nav_menus( [
-		'rwt-menu-header' => esc_html__( 'RWT Header Menu', 'rest-api-endpoints' ),
-		'rwt-menu-footer' => esc_html__( 'RWT Footer Menu', 'rest-api-endpoints' ),
+		'hcms-menu-header' => esc_html__( 'HCMS Header Menu', 'headless-cms' ),
+		'hcms-menu-footer' => esc_html__( 'HCMS Footer Menu', 'headless-cms' ),
 	] );
 }
-add_action( 'init', 'hw_custom_new_menu' );
+add_action( 'init', 'hcms_custom_new_menu' );
 
 /**
  * Register Sidebar
@@ -50,7 +50,7 @@ add_action( 'init', 'hw_custom_new_menu' );
  *
  * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
-function hw_sidebar_registration() {
+function hcms_sidebar_registration() {
 
 	// Arguments used in all register_sidebar() calls.
 	$shared_args = [
@@ -65,9 +65,9 @@ function hw_sidebar_registration() {
 		array_merge(
 			$shared_args,
 			[
-				'name'        => __( 'RWT Footer #1', 'rest-api-endpoints' ),
-				'id'          => 'rwt-footer-sidebar-1',
-				'description' => __( 'Widgets in this area will be displayed in the first column in the footer.', 'rest-api-endpoints' ),
+				'name'        => __( 'HCMS Footer #1', 'headless-cms' ),
+				'id'          => 'hcms-footer-sidebar-1',
+				'description' => __( 'Widgets in this area will be displayed in the first column in the footer.', 'headless-cms' ),
 			]
 		)
 	);
@@ -77,16 +77,16 @@ function hw_sidebar_registration() {
 		array_merge(
 			$shared_args,
 			[
-				'name'        => __( 'RWT Footer #2', 'rest-api-endpoints' ),
-				'id'          => 'rwt-footer-sidebar-2',
-				'description' => __( 'Widgets in this area will be displayed in the second column in the footer.', 'rest-api-endpoints' ),
+				'name'        => __( 'HCMS Footer #2', 'headless-cms' ),
+				'id'          => 'hcms-footer-sidebar-2',
+				'description' => __( 'Widgets in this area will be displayed in the second column in the footer.', 'headless-cms' ),
 			]
 		)
 	);
 
 }
 
-add_action( 'widgets_init', 'hw_sidebar_registration' );
+add_action( 'widgets_init', 'hcms_sidebar_registration' );
 
 /**
  * Register sidebar.
