@@ -24,6 +24,7 @@ class Plugin {
 		// Load plugin classes.
 		Assets::get_instance();
 		Customizer::get_instance();
+		Header_Footer_Api::get_instance();
 
 	}
 

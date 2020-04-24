@@ -41,8 +41,8 @@ You need to have any WordPress theme activated on your WordPress project, which 
 * Adds option to add social links in customizer
 * Registers two custom menus for header ( menu location = hcms-menu-header ) and for footer ( menu location = hcms-menu-footer )
 * Registers the following sidebars
-1. RWT Footer #1 with sidebar id 'hcms-sidebar-1'
-2. RWT Footer #2 with sidebar id 'hcms-sidebar-2'
+1. HCMS Footer #1 with sidebar id 'hcms-sidebar-1'
+2. HCMS Footer #2 with sidebar id 'hcms-sidebar-2'
 
 * Registers custom end points
 
