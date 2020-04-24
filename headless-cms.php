@@ -26,8 +26,8 @@ require_once HEADLESS_CMS_PATH . '/inc/helpers/custom-functions.php';
  *
  * @return void
  */
-function newletter_block_features_plugin_loader() {
+function headless_cms_features_plugin_loader() {
 	\Headless_CMS\Features\Inc\Plugin::get_instance();
 }
 
-newletter_block_features_plugin_loader();
+headless_cms_features_plugin_loader();

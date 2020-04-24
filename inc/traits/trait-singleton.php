@@ -76,9 +76,9 @@ trait Singleton {
 			$instance[ $called_class ] = new $called_class();
 
 			/**
-			 * Dependent items can use the newletter_block_features_singleton_init_{$called_class} hook to execute code
+			 * Dependent items can use the headless_cms_features_singleton_init_{$called_class} hook to execute code
 			 */
-			do_action( sprintf( 'newletter_block_features_singleton_init_%s', $called_class ) ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+			do_action( sprintf( 'headless_cms_features_singleton_init_%s', $called_class ) ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		}
 

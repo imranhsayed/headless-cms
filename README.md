@@ -5,7 +5,7 @@
 
 A WordPress plugin that adds features to use WordPress as a headless CMS with any front-end environment using REST API
 
-## Maintainers
+## Maintainer
 
 | Name                                                   | Github Username |
 |--------------------------------------------------------|-----------------|
