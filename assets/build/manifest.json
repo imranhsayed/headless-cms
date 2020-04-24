@@ -1,4 +1,4 @@
 {
-  "main.css": "css/main.css",
-  "main.js": "js/main.js"
+  "settings.css": "css/settings.css",
+  "settings.js": "js/settings.js"
 }

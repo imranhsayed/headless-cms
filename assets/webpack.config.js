@@ -21,7 +21,7 @@ const FONTS_DIR = path.resolve( __dirname, 'src/fonts' );
 const BUILD_DIR = path.resolve( __dirname, 'build' );
 
 const entry = {
-	main: JSDir + '/main.js',
+	settings: JSDir + '/settings.js',
 };
 
 const output = {

@@ -1,0 +1,86 @@
+/* styles */
+
+@import "base/colors";
+
+.hcms-settings-header {
+	margin: 24px 0 36px 0;
+}
+
+.hcms-hero-img-section,
+.hcms-srch-back-img-section {
+
+	input:focus {
+		outline: none;
+	}
+
+	.hcms-hero-img {
+		display: none;
+		margin-bottom: 10px;
+	}
+
+	.hcms-hero-remove-btn {
+		display: none;
+		color: $blue_primary;
+		border-color: $blue_primary;
+		background: $button_background-gray-secondary;
+		vertical-align: top;
+		text-decoration: none;
+		font-size: 13px;
+		line-height: 2;
+		min-height: 30px;
+		margin: 0;
+		padding: 0 10px;
+		cursor: pointer;
+		border-width: 1px;
+		border-style: solid;
+		-webkit-appearance: none;
+		border-radius: 3px;
+		white-space: nowrap;
+		box-sizing: border-box;
+	}
+
+	.hcms-hero-upload-btn {
+		width: 200px;
+		position: relative;
+		text-align: center;
+		border: 1px dashed $border_btn-gray;
+		box-sizing: border-box;
+		padding: 9px 0;
+		line-height: 1.6;
+		cursor: pointer;
+		background-color: $button_background-gray;
+		color: $color_text-gray;
+	}
+
+	&.uploaded {
+
+		.hcms-hero-img {
+			display: block;
+		}
+		.hcms-hero-remove-btn {
+			display: inline-block;
+		}
+
+		.hcms-hero-upload-btn {
+			width: auto;
+			color: $blue_primary;
+			border-color: $blue_primary;
+			background: $button_background-gray-secondary;
+			vertical-align: top;
+			display: inline-block;
+			text-decoration: none;
+			font-size: 13px;
+			line-height: 2;
+			min-height: 30px;
+			margin: 0 8px 0 0;
+			padding: 0 10px;
+			cursor: pointer;
+			border-width: 1px;
+			border-style: solid;
+			-webkit-appearance: none;
+			border-radius: 3px;
+			white-space: nowrap;
+			box-sizing: border-box;
+		}
+	}
+}

@@ -52,6 +52,16 @@ class Assets {
 	 *
 	 * @return void
 	 */
-	public function admin_enqueue_scripts( $hook_suffix ) {}
+	public function admin_enqueue_scripts( $hook_suffix ) {
+
+		wp_register_script( 'hcms-plugins-settings-js', HEADLESS_CMS_BUILD_URI . '/js/settings.js', [ 'jquery' ], filemtime( HEADLESS_CMS_BUILD_DIR . '/js/settings.js' ), true );
+		wp_register_style( 'hcms-plugins-settings-css', HEADLESS_CMS_BUILD_URI . '/css/settings.css', [], filemtime( HEADLESS_CMS_BUILD_DIR . '/css/settings.css' ), false );
+
+		wp_enqueue_style( 'hcms-plugins-settings-css' );
+		wp_enqueue_media();
+		wp_enqueue_script( 'hcms-plugins-settings-js' );
+		wp_enqueue_script( 'media-uploader' );
+
+	}
 
 }
