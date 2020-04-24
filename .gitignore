@@ -1,0 +1,23 @@
+# node/bower and dependency directories
+node_modules
+bower_components
+.next
+.sass-cache
+
+# Log files and databases
+*.log
+*.sql
+
+# Code Editor files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other
+.cache
+.env
