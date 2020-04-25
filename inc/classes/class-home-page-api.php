@@ -190,7 +190,7 @@ class Home_Page_Api {
 		if ( ! empty( $terms ) ) {
 			foreach ( $terms as $term ) {
 
-				$attachment_id_data = get_term_meta( 6, 'category-image-id' );
+				$attachment_id_data = get_term_meta( $term->term_id, 'category-image-id' );
 				$attachment_id      = $attachment_id_data[0];
 
 				$term_data = [
