@@ -56,13 +56,14 @@ class Home_Page_Api {
 		 *
 		 * This api gets the custom home page data for the site.
 		 * The data will include:
-		 * 1. Site Logo
-		 * 2. Header menu with the given menu location id
-		 * 3. Footer menu with the given menu location id
+		 * 1. Hero section data ( Title, description, button name )
+		 * 2. Search section data ( Search placeholder text, three lates taxonomies, with given taxonomy name passed in query params of URL, defaults to 'category' )
+		 * 3. Featured post data ( heading, 3 featured posts selected from plugin settings page )
+		 * 4. Latest posts ( Heading and 3 latest posts, with given post type passed in query params of URL, defaults to 'post' )
 		 *
 		 * The 'post_type' here is a string e.g. 'post', The 'taxonomy' here is a string e.g. 'category'
 		 *
-		 * Example: http://example.com/wp-json/rae/v1/home?post_type=post
+		 * Example: http://example.com/wp-json/rae/v1/home?post_type=post&taxonomy=category
 		 */
 		register_rest_route(
 			'rae/v1',
