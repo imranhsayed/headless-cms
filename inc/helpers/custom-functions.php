@@ -42,7 +42,7 @@ function hcms_custom_new_menu() {
 		[
 			'hcms-menu-header' => esc_html__( 'HCMS Header Menu', 'headless-cms' ),
 			'hcms-menu-footer' => esc_html__( 'HCMS Footer Menu', 'headless-cms' ),
-		] 
+		]
 	);
 }
 add_action( 'init', 'hcms_custom_new_menu' );
@@ -93,13 +93,3 @@ function hcms_sidebar_registration() {
 }
 
 add_action( 'widgets_init', 'hcms_sidebar_registration' );
-
-/**
- * Register sidebar.
- *
- * This will register and show widgets menu in the Appearance menu.
- */
-if ( function_exists( 'register_sidebar' ) ) {
-	register_sidebar();
-}
-
