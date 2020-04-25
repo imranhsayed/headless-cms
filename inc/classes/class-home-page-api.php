@@ -163,16 +163,53 @@ class Home_Page_Api {
 				'taxonomy'   => $taxonomy,
 				'hide_empty' => false,
 				'number'     => 3,
+				'parent'     => '0',
 			]
 		);
+
+		$terms_with_attach = $this->get_terms_with_attach( $terms );
 
 		$search_section_data = [
 			'searchPlaceholderTxt' => $this->plugin_options['search_placeholder_text'],
 			'searchBackURL'        => $this->plugin_options['search_back_img'],
-			'terms'                => $terms,
+			'terms'                => $terms_with_attach,
 		];
 
 		return $search_section_data;
+	}
+
+	/**
+	 * Get terms with attachment image
+	 *
+	 * @param array $terms Terms.
+	 */
+	public function get_terms_with_attach( $terms ) {
+
+		$terms_with_attach = [];
+
+		if ( ! empty( $terms ) ) {
+			foreach ( $terms as $term ) {
+
+				$attachment_id_data = get_term_meta( 6, 'category-image-id' );
+				$attachment_id      = $attachment_id_data[0];
+
+				$term_data = [
+					'termId'   => $term->term_id,
+					'name'     => $term->name,
+					'slug'     => $term->slug,
+					'taxonomy' => $term->taxonomy,
+					'image'    => [
+						'img_sizes'  => wp_get_attachment_image_sizes( $attachment_id ),
+						'img_src'    => wp_get_attachment_image_src( $attachment_id, 'full' ),
+						'img_srcset' => wp_get_attachment_image_srcset( $attachment_id ),
+					],
+				];
+
+				array_push( $terms_with_attach, $term_data );
+			}
+		}
+
+		return $terms_with_attach;
 	}
 
 	/**

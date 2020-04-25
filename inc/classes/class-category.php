@@ -58,8 +58,10 @@ class Category {
 	 */
 	public function save_category_image( $term_id ) {
 		if ( ! empty( $_POST['category-image-id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
-			$image = sanitize_text_field( $_POST['category-image-id'] );
-			add_term_meta( $term_id, 'category-image-id', $image, true );
+			$image    = sanitize_text_field( $_POST['category-image-id'] );
+			$meta_key = 'category-image-id';
+
+			add_term_meta( $term_id, $meta_key, $image, true );
 		}
 	}
 
