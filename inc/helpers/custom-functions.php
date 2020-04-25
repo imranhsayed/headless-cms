@@ -93,3 +93,26 @@ function hcms_sidebar_registration() {
 }
 
 add_action( 'widgets_init', 'hcms_sidebar_registration' );
+
+/**
+ * Add theme supports
+ */
+function hcms_theme_support() {
+	if ( function_exists( 'add_theme_support' ) ) {
+
+		/*
+		 * Enable support for Post Thumbnails on posts and pages.
+		 *
+		 * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
+		 */
+		add_theme_support( 'post-thumbnails' );
+
+		// Set post thumbnail size.
+		set_post_thumbnail_size( 1200, 9999 );
+
+		// Add support for full and wide align images.
+		add_theme_support( 'align-wide' );
+	}
+}
+
+add_action( 'after_setup_theme', 'hcms_theme_support' );

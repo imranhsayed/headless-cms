@@ -26,6 +26,7 @@ class Plugin {
 		Customizer::get_instance();
 		Header_Footer_Api::get_instance();
 		Home_Page_Api::get_instance();
+		Post_By_Tax_Api::get_instance();
 		Category::get_instance();
 		Settings::get_instance();
 

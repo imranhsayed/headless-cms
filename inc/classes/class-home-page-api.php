@@ -241,6 +241,7 @@ class Home_Page_Api {
 				$post_data['id']               = $post_ID;
 				$post_data['title']            = get_the_title( $post_ID );
 				$post_data['excerpt']          = get_the_excerpt( $post_ID );
+				$post_data['slug']             = get_post_field( 'post_name', $post_ID );
 				$post_data['date']             = get_the_date( '', $post_ID );
 				$post_data['attachment_image'] = [
 					'img_sizes'  => wp_get_attachment_image_sizes( $attachment_id ),
