@@ -12,7 +12,7 @@ use Headless_CMS\Features\Inc\Traits\Singleton;
 /**
  * Class Settings
  *
- * Settings option name: 'hcms_app_options'
+ * Settings option name: 'hcms_plugin_options'
  */
 class Settings {
 
@@ -67,7 +67,7 @@ class Settings {
 	 * Register our settings.
 	 */
 	public function register_plugin_settings() {
-		register_setting( 'hcms-plugin-settings-group', 'hcms_app_options' );
+		register_setting( 'hcms-plugin-settings-group', 'hcms_plugin_options' );
 	}
 
 	/**
