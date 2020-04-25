@@ -81,22 +81,22 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/js/settings.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/js/category.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/js/settings.js":
+/***/ "./src/js/category.js":
 /*!****************************!*\
-  !*** ./src/js/settings.js ***!
+  !*** ./src/js/category.js ***!
   \****************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _scss_settings_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/settings.scss */ "./src/scss/settings.scss");
-/* harmony import */ var _scss_settings_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_scss_settings_scss__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _scss_category_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/category.scss */ "./src/scss/category.scss");
+/* harmony import */ var _scss_category_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_scss_category_scss__WEBPACK_IMPORTED_MODULE_0__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -104,7 +104,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /**
- * Settings scripts, loaded plugin's settings page.
+ * Category scripts, loaded plugin's settings page.
  *
  * @package headless-cms
  */
@@ -116,16 +116,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 (function ($) {
   /**
-   * Settings Class.
+   * Category Class.
    */
-  var Settings = /*#__PURE__*/function () {
+  var Category = /*#__PURE__*/function () {
     /**
      * Constructor.
      *
      * @return {void}
      */
-    function Settings() {
-      _classCallCheck(this, Settings);
+    function Category() {
+      _classCallCheck(this, Category);
 
       this.init();
     }
@@ -136,96 +136,75 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
      */
 
 
-    _createClass(Settings, [{
+    _createClass(Category, [{
       key: "init",
       value: function init() {
-        this.handleMediaUpload('#hcms-hero-img-section');
-        this.handleMediaUpload('#hcms-srch-back-img-section');
+        this.mediaUpload('.hcms_tax_media_button.button');
+        this.addEvents();
+        this.ajaxRequest();
       }
-      /**
-       * Handle Media Upload
-       *
-       * @param {string} sectionId Section Id.
-       *
-       * @return {void}
-       */
-
     }, {
-      key: "handleMediaUpload",
-      value: function handleMediaUpload(sectionId) {
-        /**
-         * Upload media.
-         */
-        var mediaUploader; // When the Upload Button is clicked, open the WordPress Media Uploader to select/change the image.
-
-        $(sectionId + ' .hcms-hero-upload-btn').click(function (event) {
-          event.preventDefault();
-
-          if (mediaUploader) {
-            mediaUploader.open();
-            return;
-          }
-          /* eslint-disable */
-
-
-          mediaUploader = wp.media.frames.file_frame = wp.media({
-            title: 'Choose Image',
-            button: {
-              text: 'Choose Image'
-            },
-            multiple: false
-          });
-          /* eslint-enable */
-
-          mediaUploader.on('select', function () {
-            var attachment = mediaUploader.state().get('selection').first().toJSON();
-            var inputEl = $(sectionId + ' .hcms-hero-input');
-            var imgEl = $(sectionId + ' .hcms-hero-img');
-            var uploadBtnEl = $(sectionId + ' .hcms-hero-upload-btn');
-            imgEl.attr('src', attachment.url);
-            inputEl.val(attachment.url);
-            uploadBtnEl.val('Change Logo');
-            $(sectionId).addClass('uploaded');
-          });
-          mediaUploader.open();
+      key: "addEvents",
+      value: function addEvents() {
+        $('body').on('click', '.hcms_tax_media_remove', function () {
+          $('#category-image-id').val('');
+          $('#category-image-wrapper').html('<img class="custom_media_image" src="" style="margin:0;padding:0;max-height:100px;float:none;" />');
         });
-        this.handleRemoveMedia(sectionId);
       }
-      /**
-       * Handles Remove Media.
-       *
-       * @param {string} sectionId Section Id.
-       *
-       * @return {void}
-       */
-
     }, {
-      key: "handleRemoveMedia",
-      value: function handleRemoveMedia(sectionId) {
-        // When the remove media button is clicked, remove the image url and the image.
-        $(sectionId + ' .hcms-hero-remove-btn').on('click', function () {
-          var inputEl = $(sectionId + ' .hcms-hero-input');
-          var imgEl = $(sectionId + ' .hcms-hero-img');
-          var uploadBtnEl = $(sectionId + ' .hcms-hero-upload-btn');
-          imgEl.attr('src', '');
-          inputEl.val('');
-          uploadBtnEl.val('Select Logo');
-          $(sectionId).removeClass('uploaded');
+      key: "mediaUpload",
+      value: function mediaUpload(btnClass) {
+        var customMedia = true;
+        var origSendAttachment = wp.media.editor.send.attachment;
+        $('body').on('click', btnClass, function (e) {
+          var btnID = '#' + $(this).attr('id');
+          var button = $(btnID);
+          customMedia = true;
+
+          wp.media.editor.send.attachment = function (props, attachment) {
+            if (customMedia) {
+              $('#category-image-id').val(attachment.id);
+              $('#category-image-wrapper').html('<img class="custom_media_image" src=""/>');
+              $('#category-image-wrapper .custom_media_image').attr('src', attachment.url).css('display', 'block');
+            } else {
+              return origSendAttachment.apply(btnID, [props, attachment]);
+            }
+          };
+
+          wp.media.editor.open(button);
+          return false;
+        });
+      }
+    }, {
+      key: "ajaxRequest",
+      value: function ajaxRequest() {
+        $(document).ajaxComplete(function (event, xhr, settings) {
+          var queryStringArr = settings.data.split('&');
+
+          if (-1 !== $.inArray('action=add-tag', queryStringArr)) {
+            var xml = xhr.responseXML;
+            var response = $(xml).find('term_id').text();
+
+            if ('' != response) {
+              // Clear the thumb image
+              $('#category-image-wrapper').html('');
+            }
+          }
         });
       }
     }]);
 
-    return Settings;
+    return Category;
   }();
 
-  new Settings();
+  new Category();
 })(jQuery);
 
 /***/ }),
 
-/***/ "./src/scss/settings.scss":
+/***/ "./src/scss/category.scss":
 /*!********************************!*\
-  !*** ./src/scss/settings.scss ***!
+  !*** ./src/scss/category.scss ***!
   \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -235,4 +214,4 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 /***/ })
 
 /******/ });
-//# sourceMappingURL=settings.js.map
+//# sourceMappingURL=category.js.map

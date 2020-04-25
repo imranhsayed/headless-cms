@@ -9,15 +9,6 @@
  */
 import '../scss/settings.scss';
 
-
-/**
- * Plugin Settings.
- *
- * @package hcms-app-features
- */
-
-import '../scss/settings.scss';
-
 ( ( $ ) => {
 
 	/**

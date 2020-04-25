@@ -22,6 +22,7 @@ const BUILD_DIR = path.resolve( __dirname, 'build' );
 
 const entry = {
 	settings: JSDir + '/settings.js',
+	category: JSDir + '/category.js',
 };
 
 const output = {

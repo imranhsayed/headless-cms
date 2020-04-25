@@ -8,7 +8,7 @@
 ?>
 
 <div class="form-field term-group">
-	<label for="category-image-id"><?php esc_html_e('Category Image', 'headless-cms'); ?></label>
+	<label for="category-image-id"><?php esc_html_e( 'Category Image', 'headless-cms' ); ?></label>
 	<input type="hidden" id="category-image-id" name="category-image-id" class="custom_media_url" value="">
 	<div id="category-image-wrapper"></div>
 	<p>
