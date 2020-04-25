@@ -1,4 +1,6 @@
 {
   "settings.css": "css/settings.css",
-  "settings.js": "js/settings.js"
+  "settings.css.map": "css/settings.css.map",
+  "settings.js": "js/settings.js",
+  "settings.js.map": "js/settings.js.map"
 }

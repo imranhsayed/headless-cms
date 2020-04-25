@@ -79,10 +79,10 @@ class Header_Footer_Api {
 	 * @return WP_Error|WP_REST_Response response object.
 	 */
 	public function rest_endpoint_handler( WP_REST_Request $request ) {
-		$response   = [];
-		$parameters = $request->get_params();
-		$header_menu_location_id   = ! empty( $parameters['header_location_id'] ) ? sanitize_text_field( $parameters['header_location_id'] ) : '';
-		$footer_menu_location_id   = ! empty( $parameters['footer_location_id'] ) ? sanitize_text_field( $parameters['footer_location_id'] ) : '';
+		$response                = [];
+		$parameters              = $request->get_params();
+		$header_menu_location_id = ! empty( $parameters['header_location_id'] ) ? sanitize_text_field( $parameters['header_location_id'] ) : '';
+		$footer_menu_location_id = ! empty( $parameters['footer_location_id'] ) ? sanitize_text_field( $parameters['footer_location_id'] ) : '';
 
 		// Error Handling.
 		$error = new WP_Error();
@@ -93,22 +93,22 @@ class Header_Footer_Api {
 		// If any menus found.
 		if ( ! empty( $header_menu_items ) || ! empty( $footer_menu_items ) ) {
 
-			$response['status']    = 200;
-			$response['data'] = [
+			$response['status'] = 200;
+			$response['data']   = [
 				'header' => [
-					'siteLogoUrl' => $this->get_custom_logo_url( 'custom_logo' ),
-					'siteTitle' => get_bloginfo( 'title' ),
+					'siteLogoUrl'     => $this->get_custom_logo_url( 'custom_logo' ),
+					'siteTitle'       => get_bloginfo( 'title' ),
 					'siteDescription' => get_bloginfo( 'description' ),
-					'favicon' => get_site_icon_url(),
+					'favicon'         => get_site_icon_url(),
 					'headerMenuItems' => $header_menu_items,
 				],
 				'footer' => [
 					'footerMenuItems' => $footer_menu_items,
-					'socialLinks' => $this->get_social_icons(),
-					'copyrightText' => $this->get_copyright_text(),
-					'sidebarOne' => $this->get_sidebar( 'hcms-footer-sidebar-1' ),
-					'sidebarTwo' => $this->get_sidebar( 'hcms-footer-sidebar-2' ),
-				]
+					'socialLinks'     => $this->get_social_icons(),
+					'copyrightText'   => $this->get_copyright_text(),
+					'sidebarOne'      => $this->get_sidebar( 'hcms-footer-sidebar-1' ),
+					'sidebarTwo'      => $this->get_sidebar( 'hcms-footer-sidebar-2' ),
+				],
 			];
 
 		} else {
@@ -127,12 +127,14 @@ class Header_Footer_Api {
 	/**
 	 * Get Custom logo URL.
 	 *
-	 * @return string
+	 * @param string $key Key.
+	 *
+	 * @return string Image.
 	 */
 	public function get_custom_logo_url( $key ) {
 
 		$custom_logo_id = get_theme_mod( $key );
-		$image = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+		$image          = wp_get_attachment_image_src( $custom_logo_id, 'full' );
 		return $image[0];
 	}
 
@@ -143,7 +145,7 @@ class Header_Footer_Api {
 	 */
 	public function get_social_icons() {
 
-		$social_icons = [];
+		$social_icons      = [];
 		$social_icons_name = [ 'facebook', 'twitter', 'instagram', 'youtube' ];
 
 		foreach ( $social_icons_name as $social_icon_name ) {
@@ -151,10 +153,13 @@ class Header_Footer_Api {
 			$social_link = get_theme_mod( sprintf( 'rae_%s_link', $social_icon_name ) );
 
 			if ( $social_link ) {
-				array_push( $social_icons, [
-					'iconName' =>esc_attr( $social_icon_name ),
-					'iconUrl' => esc_url( $social_link )
-				] );
+				array_push(
+					$social_icons,
+					[
+						'iconName' => esc_attr( $social_icon_name ),
+						'iconUrl'  => esc_url( $social_link ),
+					]
+				);
 			}
 		}
 
@@ -172,27 +177,27 @@ class Header_Footer_Api {
 	}
 
 	/**
-	 * Get nav menu items by location
+	 * Get nav menu items by location.
 	 *
-	 * @param string $location The menu location id
-	 * @param array $args Arguments.
+	 * @param string $location The menu location id.
+	 * @param array  $args Arguments.
 	 *
 	 * @return array $menu_data Menu items array of Objects.
 	 */
-	function get_nav_menu_items( $location, $args = [] ) {
+	public function get_nav_menu_items( $location, $args = [] ) {
 
 		if ( empty( $location ) ) {
 			return '';
 		}
 
-		// Get all locations
+		// Get all locations.
 		$locations = get_nav_menu_locations();
 
-		// Get object id by location
+		// Get object id by location.
 		$object = wp_get_nav_menu_object( $locations[ $location ] );
 
-		// Get menu items by menu name
-		$menu_data = wp_get_nav_menu_items( $object->name, $args );
+		// Get menu items by menu name.
+		$menu_data  = wp_get_nav_menu_items( $object->name, $args );
 		$menu_items = [];
 
 		if ( ! empty( $menu_data ) ) {
@@ -200,11 +205,11 @@ class Header_Footer_Api {
 			// Menus ( Loop through the menu, and push all the parent menu items first ).
 			foreach ( $menu_data as $item ) {
 				if ( empty( $item->menu_item_parent ) ) {
-					$menu_item              = [];
-					$menu_item['ID']        = $item->ID;
-					$menu_item['title']     = $item->title;
-					$menu_item['url']       = $item->url;
-					$menu_item['children']  = [];
+					$menu_item             = [];
+					$menu_item['ID']       = $item->ID;
+					$menu_item['title']    = $item->title;
+					$menu_item['url']      = $item->url;
+					$menu_item['children'] = [];
 
 					// We are also getting the page slug and the page id that this menu is linked to.
 					$menu_item['pageSlug'] = get_post_field( 'post_name', $item->object_id );
@@ -221,17 +226,17 @@ class Header_Footer_Api {
 				if ( $item->menu_item_parent ) {
 
 					// Create a child menu array.
-					$submenu_item              = [];
-					$submenu_item['ID']        = $item->ID;
-					$submenu_item['title']     = $item->title;
-					$submenu_item['url']       = $item->url;
+					$submenu_item          = [];
+					$submenu_item['ID']    = $item->ID;
+					$submenu_item['title'] = $item->title;
+					$submenu_item['url']   = $item->url;
 
 					// We are also getting the page slug and the page id that this menu is linked to.
 					$submenu_item['pageSlug'] = get_post_field( 'post_name', $item->object_id );
 					$submenu_item['pageID']   = intval( $item->object_id );
 
 					// Loop through the menu items and find the parent whose child this is.
-					foreach( $menu_items as $key => $parent_item ) {
+					foreach ( $menu_items as $key => $parent_item ) {
 
 						// if the parent id of this child menu, is same as the parent menu id.
 						if ( intval( $item->menu_item_parent ) === $parent_item['ID'] ) {
@@ -241,15 +246,13 @@ class Header_Footer_Api {
 
 						}
 					}
-
 				}
 			}
-
 		}
 
 		$menu_items = ! empty( $menu_items ) ? $menu_items : '';
 
-		// Return menu post objects
+		// Return menu post objects.
 		return $menu_items;
 
 	}
@@ -257,7 +260,7 @@ class Header_Footer_Api {
 	/**
 	 * Returns the content of all the sidebars with given sidebar id.
 	 *
-	 * @param $sidebar_id
+	 * @param string $sidebar_id Sidebar id.
 	 *
 	 * @return false|string
 	 */

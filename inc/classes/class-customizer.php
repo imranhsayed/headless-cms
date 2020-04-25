@@ -51,6 +51,11 @@ class Customizer {
 
 	}
 
+	/**
+	 * Add Footer section settings.
+	 *
+	 * @param object $wp_customize WP_Customize.
+	 */
 	public function footer_section( $wp_customize ) {
 
 		$wp_customize->add_section(
@@ -86,11 +91,11 @@ class Customizer {
 	/**
 	 * Add social icon section.
 	 *
-	 * @param $wp_customize
+	 * @param object $wp_customize WP_Customize.
 	 */
 	public function social_icon_section( $wp_customize ) {
 
-		// Social Icons
+		// Social Icons.
 		$social_icons = [ 'facebook', 'twitter', 'instagram', 'youtube' ];
 
 		$wp_customize->add_section(

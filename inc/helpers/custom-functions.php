@@ -16,16 +16,20 @@
 function headless_cms_get_template_part( $slug, $variables = [] ) {
 
 	$template         = sprintf( '%s.php', $slug );
-	$located_template = locate_template( $template, false, false );
+	$located_template = '';
+
+	if ( file_exists( HEADLESS_CMS_PATH . '/' . $template ) ) {
+		$located_template = HEADLESS_CMS_PATH . '/' . $template;
+	} else {
+		$located_template = locate_template( $template, false, false );
+	}
 
 	if ( '' === $located_template ) {
 		return;
 	}
-
 	if ( ! empty( $variables ) && is_array( $variables ) ) {
 		extract( $variables, EXTR_SKIP ); // phpcs:ignore -- Used as an exception as there is no better alternative.
 	}
-
 	include $located_template; // phpcs:ignore
 
 }
@@ -34,10 +38,12 @@ function headless_cms_get_template_part( $slug, $variables = [] ) {
  * Register Menus.
  */
 function hcms_custom_new_menu() {
-	register_nav_menus( [
-		'hcms-menu-header' => esc_html__( 'HCMS Header Menu', 'headless-cms' ),
-		'hcms-menu-footer' => esc_html__( 'HCMS Footer Menu', 'headless-cms' ),
-	] );
+	register_nav_menus(
+		[
+			'hcms-menu-header' => esc_html__( 'HCMS Header Menu', 'headless-cms' ),
+			'hcms-menu-footer' => esc_html__( 'HCMS Footer Menu', 'headless-cms' ),
+		] 
+	);
 }
 add_action( 'init', 'hcms_custom_new_menu' );
 

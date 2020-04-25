@@ -9,6 +9,7 @@ namespace Headless_CMS\Features\Inc;
 
 use Headless_CMS\Features\Inc\Traits\Singleton;
 use WP_Error;
+use WP_Query;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -86,35 +87,26 @@ class Home_Page_Api {
 
 		$response   = [];
 		$parameters = $request->get_params();
-		$post_type   = ! empty( $parameters['post_type'] ) ? sanitize_text_field( $parameters['post_type'] ) : 'post';
+		$post_type  = ! empty( $parameters['post_type'] ) ? sanitize_text_field( $parameters['post_type'] ) : 'post';
 		$taxonomy   = ! empty( $parameters['taxonomy'] ) ? sanitize_text_field( $parameters['taxonomy'] ) : 'category';
 
 		// Error Handling.
 		$error = new WP_Error();
 
-		$hero_section_data = $this->get_hero_section();
+		$hero_section_data   = $this->get_hero_section();
 		$search_section_data = $this->get_search_section( $taxonomy );
-		$featured_posts = $this->get_featured_posts(  );
+		$featured_posts      = $this->get_featured_posts();
+		$latest_posts        = $this->get_latest_posts( $post_type );
 
 		// If any menus found.
-		if ( ! empty( $header_menu_items ) || ! empty( $footer_menu_items ) ) {
+		if ( ! empty( $hero_section_data ) || ! empty( $search_section_data ) || ! empty( $featured_posts ) || ! empty( $latest_posts ) ) {
 
-			$response['status']    = 200;
-			$response['data'] = [
-				'header' => [
-					'siteLogoUrl' => $this->get_custom_logo_url( 'custom_logo' ),
-					'siteTitle' => get_bloginfo( 'title' ),
-					'siteDescription' => get_bloginfo( 'description' ),
-					'favicon' => get_site_icon_url(),
-					'headerMenuItems' => $header_menu_items,
-				],
-				'footer' => [
-					'footerMenuItems' => $footer_menu_items,
-					'socialLinks' => $this->get_social_icons(),
-					'copyrightText' => $this->get_copyright_text(),
-					'sidebarOne' => $this->get_sidebar( 'hcms-footer-sidebar-1' ),
-					'sidebarTwo' => $this->get_sidebar( 'hcms-footer-sidebar-2' ),
-				]
+			$response['status'] = 200;
+			$response['data']   = [
+				'heroSection'          => $hero_section_data,
+				'searchSection'        => $search_section_data,
+				'featuredPostsSection' => $featured_posts,
+				'latestPostsSection'   => $latest_posts,
 			];
 
 		} else {
@@ -142,10 +134,10 @@ class Home_Page_Api {
 		}
 
 		$hero_section_data = [
-			'heroTitle' => $this->plugin_options['hero_title'],
-			'heroSubTitle' => $this->plugin_options['hero_subtitle'],
-			'heroBtnTxt' => $this->plugin_options['hero_btn_text'],
-			'heroBackURL' => $this->plugin_options['hero_back_img'],
+			'heroTitle'       => $this->plugin_options['hero_title'],
+			'heroDescription' => $this->plugin_options['hero_description'],
+			'heroBtnTxt'      => $this->plugin_options['hero_btn_text'],
+			'heroBackURL'     => $this->plugin_options['hero_back_img'],
 		];
 
 		return $hero_section_data;
@@ -154,9 +146,9 @@ class Home_Page_Api {
 	/**
 	 * Get Search Section data.
 	 *
-	 * @param string $taxonomy Taxonomy
+	 * @param string $taxonomy Taxonomy.
 	 *
-	 * @return array $search_section_data Hero Section data
+	 * @return array $search_section_data Hero Section data.
 	 */
 	public function get_search_section( $taxonomy ) {
 
@@ -165,23 +157,125 @@ class Home_Page_Api {
 		}
 
 		// Get latest three categories.
-		$terms = get_terms( [
-			'taxonomy' => $taxonomy,
-			'hide_empty' => false,
-			'number' => 3,
-		] );
+		$terms = get_terms(
+			[
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => false,
+				'number'     => 3,
+			]
+		);
 
 		$search_section_data = [
 			'searchPlaceholderTxt' => $this->plugin_options['search_placeholder_text'],
-			'searchBackURL' => $this->plugin_options['search_back_img'],
-			'terms' => $terms,
+			'searchBackURL'        => $this->plugin_options['search_back_img'],
+			'terms'                => $terms,
 		];
 
 		return $search_section_data;
 	}
 
+	/**
+	 * Get featured Posts.
+	 *
+	 * @return array $featured_posts Featured Posts.
+	 */
 	public function get_featured_posts() {
 
+		if ( empty( $this->plugin_options ) ) {
+			return [];
+		}
+
+		$featured_post_ids = [
+			intval( $this->plugin_options['first_featured_post_id'] ),
+			intval( $this->plugin_options['second_featured_post_id'] ),
+			intval( $this->plugin_options['third_featured_post_id'] ),
+		];
+
+		$featured_posts = [];
+
+		if ( ! empty( $featured_post_ids ) && is_array( $featured_post_ids ) ) {
+			foreach ( $featured_post_ids as $post_ID ) {
+
+				$author_id     = get_post_field( 'post_author', $post_ID );
+				$attachment_id = get_post_thumbnail_id( $post_ID );
+
+				$post_data                     = [];
+				$post_data['id']               = $post_ID;
+				$post_data['title']            = get_the_title( $post_ID );
+				$post_data['excerpt']          = get_the_excerpt( $post_ID );
+				$post_data['date']             = get_the_date( '', $post_ID );
+				$post_data['attachment_image'] = [
+					'img_sizes'  => wp_get_attachment_image_sizes( $attachment_id ),
+					'img_src'    => wp_get_attachment_image_src( $attachment_id, 'full' ),
+					'img_srcset' => wp_get_attachment_image_srcset( $attachment_id ),
+				];
+				$post_data['meta']             = [
+					'author_id'   => $author_id,
+					'author_name' => get_the_author_meta( 'display_name', $author_id ),
+				];
+
+				array_push( $featured_posts, $post_data );
+
+			}
+		}
+
+		return [
+			'featuredPostHeading' => $this->plugin_options['featured_post_heading'],
+			'featuredPosts'       => $featured_posts,
+		];
+
+	}
+
+	/**
+	 * Get latest posts
+	 *
+	 * @param string $post_type Post Type.
+	 *
+	 * @return array latest posts
+	 */
+	public function get_latest_posts( $post_type ) {
+
+		$args = [
+			'post_type'              => $post_type,
+			'post_status'            => 'publish',
+			'posts_per_page'         => 3, // Get three posts.
+			'fields'                 => 'ids',
+			'orderby'                => 'date',
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+
+		];
+
+		$result = new WP_Query( $args );
+
+		$latest_post_ids = $result->get_posts();
+
+		$latest_posts = [];
+
+		if ( ! empty( $latest_post_ids ) && is_array( $latest_post_ids ) ) {
+			foreach ( $latest_post_ids as $post_ID ) {
+
+				$attachment_id = get_post_thumbnail_id( $post_ID );
+
+				$post_data                     = [];
+				$post_data['id']               = $post_ID;
+				$post_data['title']            = get_the_title( $post_ID );
+				$post_data['excerpt']          = get_the_excerpt( $post_ID );
+				$post_data['attachment_image'] = [
+					'img_sizes'  => wp_get_attachment_image_sizes( $attachment_id ),
+					'img_src'    => wp_get_attachment_image_src( $attachment_id, 'full' ),
+					'img_srcset' => wp_get_attachment_image_srcset( $attachment_id ),
+				];
+
+				array_push( $latest_posts, $post_data );
+
+			}
+		}
+
+		return [
+			'latestPostHeading' => ! empty( $this->plugin_options['latest_post_heading'] ) ? $this->plugin_options['latest_post_heading'] : '',
+			'latestPosts'       => $latest_posts,
+		];
 	}
 
 }
