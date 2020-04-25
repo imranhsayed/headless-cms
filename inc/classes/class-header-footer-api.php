@@ -52,9 +52,8 @@ class Header_Footer_Api {
 		 *
 		 * This api gets the header and footer of the site.
 		 * The data will include:
-		 * 1. Site Logo
-		 * 2. Header menu with the given menu location id
-		 * 3. Footer menu with the given menu location id
+		 * 1. header data ( siteTitle, siteDescription, siteLogoUrl, favicon, headerMenuItems( Header menu with the given menu location id ) )
+		 * 2. footer data ( copyrightText, sidebarOne( widget ), sidebarTwo ( Widget ), socialLinks, footerMenuItems( Footer menu with the given menu location id ) )
 		 *
 		 * The 'header_location_id' here is a string e.g. 'primary' or whatever 'header_location_id' name you have used at the time of registration of the menu.
 		 *
