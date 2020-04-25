@@ -33,17 +33,9 @@ class Assets {
 		/**
 		 * Action
 		 */
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
 
 	}
-
-	/**
-	 * To enqueue scripts and styles.
-	 *
-	 * @return void
-	 */
-	public function enqueue_scripts() {}
 
 	/**
 	 * To enqueue scripts and styles. in admin.
