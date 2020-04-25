@@ -138,7 +138,7 @@ class Home_Page_Api {
 			'heroTitle'       => $this->plugin_options['hero_title'],
 			'heroDescription' => $this->plugin_options['hero_description'],
 			'heroBtnTxt'      => $this->plugin_options['hero_btn_text'],
-			'heroBackURL'     => $this->plugin_options['hero_back_img'],
+			'heroImgURL'     => $this->plugin_options['hero_back_img'],
 		];
 
 		return $hero_section_data;
