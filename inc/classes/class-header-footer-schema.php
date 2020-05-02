@@ -241,7 +241,7 @@ class Header_Footer_Schema {
 	 * @return mixed
 	 */
 	public function get_copyright_text() {
-		return get_theme_mod( 'ow_footer_text' );
+		return get_theme_mod( 'rae_footer_text' );
 	}
 
 	/**
