@@ -1,10 +1,6 @@
 {
   "category.css": "css/category.css",
-  "category.css.map": "css/category.css.map",
   "category.js": "js/category.js",
-  "category.js.map": "js/category.js.map",
   "settings.css": "css/settings.css",
-  "settings.css.map": "css/settings.css.map",
-  "settings.js": "js/settings.js",
-  "settings.js.map": "js/settings.js.map"
+  "settings.js": "js/settings.js"
 }

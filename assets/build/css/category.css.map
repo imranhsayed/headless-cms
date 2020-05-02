@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./src/scss/category.scss"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA,cAAc","file":"css/category.css","sourcesContent":[".custom_media_image {\n  margin: 0;\n  padding: 0;\n  max-height: 100px;\n  float: none; }\n"],"sourceRoot":""}

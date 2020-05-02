@@ -6,7 +6,7 @@
  */
 
 if ( empty( $option_val_array ) ) {
-	return;
+	$option_val_array = [];
 }
 
 $search_placeholder_text = ! empty( $option_val_array['search_placeholder_text'] ) ? $option_val_array['search_placeholder_text'] : '';

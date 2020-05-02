@@ -37,7 +37,7 @@ class Home_Page_Api {
 	 */
 	protected function setup_hooks() {
 
-		$this->route = '/home';
+		$this->route = '/imran';
 
 		/**
 		 * Action
@@ -63,13 +63,13 @@ class Home_Page_Api {
 		 *
 		 * The 'post_type' here is a string e.g. 'post', The 'taxonomy' here is a string e.g. 'category'
 		 *
-		 * Example: http://example.com/wp-json/rae/v1/home?post_type=post&taxonomy=category
+		 * Example: http://example.com/wp-json/rae/v2/home?post_type=post&taxonomy=category
 		 */
 		register_rest_route(
-			'rae/v1',
+			'rae/v2',
 			$this->route,
 			[
-				'method'   => 'GET',
+				'methods'  => 'GET',
 				'callback' => [ $this, 'rest_endpoint_handler' ],
 			]
 		);
@@ -102,13 +102,22 @@ class Home_Page_Api {
 		// If any menus found.
 		if ( ! empty( $hero_section_data ) || ! empty( $search_section_data ) || ! empty( $featured_posts ) || ! empty( $latest_posts ) ) {
 
-			$response['status'] = 200;
-			$response['data']   = [
+//			$response['status'] = 200;
+//			$response['data']   = [
+//				'heroSection'          => $hero_section_data,
+//				'searchSection'        => $search_section_data,
+//				'featuredPostsSection' => $featured_posts,
+//				'latestPostsSection'   => $latest_posts,
+//			];
+
+			$data = array(
+				'wordpress_id' => 220,
 				'heroSection'          => $hero_section_data,
 				'searchSection'        => $search_section_data,
 				'featuredPostsSection' => $featured_posts,
 				'latestPostsSection'   => $latest_posts,
-			];
+			);
+			return new WP_REST_Response( $data, 200 );
 
 		} else {
 
@@ -152,10 +161,6 @@ class Home_Page_Api {
 	 * @return array $search_section_data Hero Section data.
 	 */
 	public function get_search_section( $taxonomy ) {
-
-		if ( empty( $this->plugin_options ) ) {
-			return [];
-		}
 
 		// Get latest three categories.
 		$terms = get_terms(

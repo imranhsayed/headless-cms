@@ -6,7 +6,7 @@
  */
 
 if ( empty( $option_val_array ) ) {
-	return;
+	$option_val_array = [];
 }
 
 $hero_title         = ! empty( $option_val_array['hero_title'] ) ? $option_val_array['hero_title'] : '';

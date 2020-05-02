@@ -6,7 +6,7 @@
  */
 
 if ( empty( $option_val_array ) ) {
-	return;
+	$option_val_array = [];
 }
 
 $latest_post_heading = ! empty( $option_val_array['latest_post_heading'] ) ? $option_val_array['latest_post_heading'] : '';

@@ -29,6 +29,7 @@ class Plugin {
 		Post_By_Tax_Api::get_instance();
 		Category::get_instance();
 		Settings::get_instance();
+		Header_Footer_Schema::get_instance();
 
 	}
 
