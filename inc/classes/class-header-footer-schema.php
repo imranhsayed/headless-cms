@@ -159,8 +159,8 @@ class Header_Footer_Schema {
 					return [
 						'copyrightText' => $this->get_copyright_text(),
 						'socialLinks'   => $this->get_social_icons(),
-						'sidebarOne'      => $this->get_sidebar( 'hcms-footer-sidebar-1' ),
-						'sidebarTwo'      => $this->get_sidebar( 'hcms-footer-sidebar-2' ),
+						'sidebarOne'    => $this->get_sidebar( 'hcms-footer-sidebar-1' ),
+						'sidebarTwo'    => $this->get_sidebar( 'hcms-footer-sidebar-2' ),
 					];
 
 				},
@@ -241,7 +241,10 @@ class Header_Footer_Schema {
 	 * @return mixed
 	 */
 	public function get_copyright_text() {
-		return get_theme_mod( 'rae_footer_text' );
+
+		$copy_right_text = get_theme_mod( 'rae_footer_text' );
+
+		return $copy_right_text ? $copy_right_text : '';
 	}
 
 	/**
