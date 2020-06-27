@@ -68,7 +68,7 @@ class Header_Footer_Schema {
 						'type'        => 'String',
 						'description' => __( 'Site tagline', 'headless-cms' ),
 					],
-					'favicon' => [
+					'favicon'     => [
 						'type'        => 'String',
 						'description' => __( 'favicon', 'headless-cms' ),
 					],
@@ -125,11 +125,11 @@ class Header_Footer_Schema {
 						'type'        => [ 'list_of' => 'HCMSSocialLinks' ],
 						'description' => __( 'Social links', 'headless-cms' ),
 					],
-					'sidebarOne' => [
+					'sidebarOne'    => [
 						'type'        => 'String',
 						'description' => __( 'sidebarOne', 'headless-cms' ),
 					],
-					'sidebarTwo' => [
+					'sidebarTwo'    => [
 						'type'        => 'String',
 						'description' => __( 'sidebarTwo', 'headless-cms' ),
 					],

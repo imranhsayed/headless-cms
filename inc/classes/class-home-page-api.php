@@ -102,16 +102,8 @@ class Home_Page_Api {
 		// If any menus found.
 		if ( ! empty( $hero_section_data ) || ! empty( $search_section_data ) || ! empty( $featured_posts ) || ! empty( $latest_posts ) ) {
 
-//			$response['status'] = 200;
-//			$response['data']   = [
-//				'heroSection'          => $hero_section_data,
-//				'searchSection'        => $search_section_data,
-//				'featuredPostsSection' => $featured_posts,
-//				'latestPostsSection'   => $latest_posts,
-//			];
-
 			$data = array(
-				'wordpress_id' => 220,
+				'wordpress_id'         => 220, // Use an id required for the GraphQL query.
 				'heroSection'          => $hero_section_data,
 				'searchSection'        => $search_section_data,
 				'featuredPostsSection' => $featured_posts,
@@ -127,8 +119,6 @@ class Home_Page_Api {
 			return $error;
 
 		}
-
-		return new WP_REST_Response( $response );
 
 	}
 

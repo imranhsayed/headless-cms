@@ -98,8 +98,8 @@ add_action( 'widgets_init', 'hcms_sidebar_registration' );
  * Add theme supports
  */
 function hcms_theme_support() {
-	if ( function_exists( 'add_theme_support' ) ) {
 
+	if ( function_exists( 'add_theme_support' ) ) {
 		/*
 		 * Enable support for Post Thumbnails on posts and pages.
 		 *
@@ -113,6 +113,7 @@ function hcms_theme_support() {
 		// Add support for full and wide align images.
 		add_theme_support( 'align-wide' );
 	}
+
 }
 
 add_action( 'after_setup_theme', 'hcms_theme_support' );

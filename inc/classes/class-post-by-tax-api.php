@@ -87,19 +87,19 @@ class Post_By_Tax_Api {
 		$parameters = $request->get_params();
 		$post_type  = ! empty( $parameters['post_type'] ) ? sanitize_text_field( $parameters['post_type'] ) : 'post';
 		$taxonomy   = ! empty( $parameters['taxonomy'] ) ? sanitize_text_field( $parameters['taxonomy'] ) : 'category';
-		$slug   = ! empty( $parameters['slug'] ) ? sanitize_text_field( $parameters['slug'] ) : '';
+		$slug       = ! empty( $parameters['slug'] ) ? sanitize_text_field( $parameters['slug'] ) : '';
 
 		// Error Handling.
 		$error = new WP_Error();
 
-		$latest_posts        = $this->get_latest_posts( $post_type, $taxonomy, $slug );
+		$latest_posts = $this->get_latest_posts( $post_type, $taxonomy, $slug );
 
 		// If any menus found.
 		if ( ! empty( $hero_section_data ) || ! empty( $search_section_data ) || ! empty( $featured_posts ) || ! empty( $latest_posts ) ) {
 
 			$response['status'] = 200;
 			$response['data']   = [
-				'posts'          => $latest_posts,
+				'posts' => $latest_posts,
 			];
 
 		} else {
@@ -126,6 +126,7 @@ class Post_By_Tax_Api {
 	 */
 	public function get_latest_posts( $post_type, $taxonomy, $slug ) {
 
+		// Ignoring phps for taxonomy query as its required here.
 		$args = [
 			'post_type'              => $post_type,
 			'post_status'            => 'publish',
@@ -134,12 +135,12 @@ class Post_By_Tax_Api {
 			'orderby'                => 'date',
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
-			'tax_query' => [
+			'tax_query'              => [ // phpcs:ignore WordPress.DB.SlowDBQuery
 				[
 					'taxonomy' => $taxonomy,
-					'field' => 'slug',
-					'terms' => $slug,
-				]
+					'field'    => 'slug',
+					'terms'    => $slug,
+				],
 			],
 
 		];
