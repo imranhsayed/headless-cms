@@ -38,11 +38,31 @@ You need to have any WordPress theme activated on your WordPress project, which 
 2. Activate the plugin through the 'Plugins' screen in WordPress
 
 ## Features
+
+1. Custom REST API Endpoints.
+2. Social links in customizer.
+3. Image uploads for categories.
+4. Custom header and footer menus.
+5. Custom Widgets.
+
 * Adds option to add social links in customizer
 * Registers two custom menus for header ( menu location = hcms-menu-header ) and for footer ( menu location = hcms-menu-footer )
 * Registers the following sidebars
 1. HCMS Footer #1 with sidebar id 'hcms-sidebar-1'
 2. HCMS Footer #2 with sidebar id 'hcms-sidebar-2'
+
+== More Features ==
+1. Registers the sections for socials icons in the customizer
+
+* Social icons urls for 'facebook', 'twitter', 'instagram', 'youtube'
+
+2. Image upload features for categories
+
+* Provides Image upload features for categories.
+
+3. Plugin Settings Page
+
+* Settings for getting data for a custom page like Hero section, Search section, Featured post section, latest posts heading.
 
 * Registers custom end points
 
