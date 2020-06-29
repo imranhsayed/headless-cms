@@ -1,6 +1,6 @@
 # Headless CMS
 
-[![Project Status: WIP – Initial development is in progress.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 
 A WordPress plugin that adds features to use WordPress as a headless CMS with any front-end environment using REST API
