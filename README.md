@@ -44,6 +44,13 @@ You need to have any WordPress theme activated on your WordPress project, which 
 1. Clone the plugin directory in the `/wp-content/plugins/` directory, or install a zipped directory of this plugin through the [WordPress plugins](https://wordpress.org/plugins/headless-cms/) screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
 
+## Example Frontend applications
+
+Example of front-end applications where this plugin can be used:
+
+1. [Gatsby WordPress Theme](https://github.com/imranhsayed/gatsby-wordpress-themes)
+2. [React Wordpress Theme](https://github.com/imranhsayed/react-wordpress-theme)
+
 ## Features
 
 1. Custom REST API Endpoints.

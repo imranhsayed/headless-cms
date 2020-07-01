@@ -37,7 +37,7 @@ class Home_Page_Api {
 	 */
 	protected function setup_hooks() {
 
-		$this->route = '/imran';
+		$this->route = '/home';
 
 		/**
 		 * Action
@@ -66,7 +66,7 @@ class Home_Page_Api {
 		 * Example: http://example.com/wp-json/rae/v2/home?post_type=post&taxonomy=category
 		 */
 		register_rest_route(
-			'rae/v2',
+			'rae/v1',
 			$this->route,
 			[
 				'methods'  => 'GET',
