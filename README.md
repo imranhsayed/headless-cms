@@ -3,7 +3,9 @@
 [![Project Status: Active.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 
-A WordPress plugin that adds features to use WordPress as a headless CMS with any front-end environment using REST API
+A WordPress plugin that adds features to use WordPress as a headless CMS with any front-end environment using REST API.
+This plugin provides multiple features and you can use the one's that are relevant to your front-end application.
+You don't necessarily need to use all.
 
 
 <a href="https://youtu.be/nYXL1KKjKrc" target="_blank">
@@ -49,6 +51,7 @@ You need to have any WordPress theme activated on your WordPress project, which 
 3. Image uploads for categories.
 4. Custom header and footer menus.
 5. Custom Widgets.
+6. Custom Header and Footer GraphQL fields when using [wp-graphql] plugin(https://github.com/wp-graphql/wp-graphql)
 
 * Adds option to add social links in customizer
 * Registers two custom menus for header ( menu location = hcms-menu-header ) and for footer ( menu location = hcms-menu-footer )
@@ -68,15 +71,22 @@ You need to have any WordPress theme activated on your WordPress project, which 
 
 * Social icons urls for 'facebook', 'twitter', 'instagram', 'youtube'
 
+![](assets/images/screenshot-6.png)
+
 2. Image upload features for categories
 
 * Provides Image upload features for categories.
+
+![](assets/images/screenshot-3.png)
 
 3. Plugin Settings Page
 
 * Settings for getting data for a custom page like Hero section, Search section, Featured post section, latest posts heading.
 
 * Registers custom end points
+
+4. Custom Header and Footer GraphQL fields when using [wp-graphql] plugin(https://github.com/wp-graphql/wp-graphql)
+![](assets/images/screenshot-2.png)
 
 ## Available Endpoints:
 

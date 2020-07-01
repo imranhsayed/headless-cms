@@ -13,7 +13,7 @@ A WordPress plugin that adds features to use WordPress as a headless CMS with an
 == Description ==
 
 A WordPress plugin that adds following features to use WordPress as a headless CMS with any front-end environment using REST API
-This plugin provides multiple features and you can use the one's that is relevant to your front-end application.
+This plugin provides multiple features and you can use the one's that is relevant to your front-end application. You don't necessarily need to use all.
 
 == Features ==
 
