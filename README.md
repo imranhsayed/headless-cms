@@ -85,7 +85,7 @@ You need to have any WordPress theme activated on your WordPress project, which 
 
 * Registers custom end points
 
-4. Custom Header and Footer GraphQL fields when using [wp-graphql] plugin(https://github.com/wp-graphql/wp-graphql)
+4. Custom Header and Footer GraphQL fields when using [wp-graphql](https://github.com/wp-graphql/wp-graphql) plugin.
 ![](assets/images/screenshot-2.png)
 
 ## Available Endpoints:
