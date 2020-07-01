@@ -51,7 +51,7 @@ You need to have any WordPress theme activated on your WordPress project, which 
 3. Image uploads for categories.
 4. Custom header and footer menus.
 5. Custom Widgets.
-6. Custom Header and Footer GraphQL fields when using [wp-graphql] plugin(https://github.com/wp-graphql/wp-graphql)
+6. Custom Header and Footer GraphQL fields when using [wp-graphql](https://github.com/wp-graphql/wp-graphql) plugin
 
 * Adds option to add social links in customizer
 * Registers two custom menus for header ( menu location = hcms-menu-header ) and for footer ( menu location = hcms-menu-footer )
@@ -66,7 +66,7 @@ You need to have any WordPress theme activated on your WordPress project, which 
 ![](assets/images/screenshot-5.png)
 
 
-== More Features ==
+### More Features
 1. Registers the sections for socials icons in the customizer
 
 * Social icons urls for 'facebook', 'twitter', 'instagram', 'youtube'

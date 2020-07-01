@@ -22,7 +22,7 @@ This plugin provides multiple features and you can use the one's that is relevan
 3. Image uploads for categories.
 4. Custom header and footer menus.
 5. Custom Widgets.
-6. Custom Header and Footer GraphQL fields when using [wp-graphql] plugin(https://github.com/wp-graphql/wp-graphql)
+6. Custom Header and Footer GraphQL fields when using [wp-graphql](https://github.com/wp-graphql/wp-graphql) plugin
 
 == Feature Details ==
 
