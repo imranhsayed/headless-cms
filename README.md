@@ -41,7 +41,7 @@ You need to have any WordPress theme activated on your WordPress project, which 
 
 ## Installation :wrench:
 
-1. Clone the plugin directory in the `/wp-content/plugins/` directory, or install a zipped directory of this plugin through the WordPress plugins screen directly.
+1. Clone the plugin directory in the `/wp-content/plugins/` directory, or install a zipped directory of this plugin through the [WordPress plugins](https://wordpress.org/plugins/headless-cms/) screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
 
 ## Features
