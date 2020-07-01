@@ -13,6 +13,7 @@ A WordPress plugin that adds features to use WordPress as a headless CMS with an
 == Description ==
 
 A WordPress plugin that adds following features to use WordPress as a headless CMS with any front-end environment using REST API
+This plugin provides multiple features and you can use the one's that is relevant to your front-end application.
 
 == Features ==
 
@@ -21,6 +22,7 @@ A WordPress plugin that adds following features to use WordPress as a headless C
 3. Image uploads for categories.
 4. Custom header and footer menus.
 5. Custom Widgets.
+6. Custom Header and Footer GraphQL fields when using [wp-graphql] plugin(https://github.com/wp-graphql/wp-graphql)
 
 == Feature Details ==
 
@@ -67,6 +69,14 @@ This section describes how to install the plugin and get it working.
 4. You can set up custom header and footer menus.
 5. You can add image to categories.
 
+== Demo of the Frontend applications that can be used with this plugin ==
+
+Please check the demo of an example React front-end application, where this plugin can be used.
+
+[2020-07-02] Demo.
+
+[youtube https://youtu.be/nYXL1KKjKrc]
+
 = Its not working.
 
 Step 1. Check if your Plugin is activated.
@@ -74,4 +84,8 @@ Step 2. Deactivate all plugins and reactivate headless-cms.
 
 == Screenshots ==
 
-1-Headless CMS. screenshot-1.png
+1-Plugin Settings. screenshot-1.png
+2-GraphQL Fields. screenshot-2.png
+3-Category Image Upload. screenshot-3.png
+4-Custom Header Menu. screenshot-4.png
+5-Custom Footer Menu. screenshot-5.png
