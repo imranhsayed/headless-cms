@@ -76,17 +76,21 @@ class Category {
 				<label for="category-image-id"><?php esc_html_e( 'Category Image', 'headless-cms' ); ?></label>
 			</th>
 			<td>
-				<?php $image_id = get_term_meta( $term->term_id, 'category-image-id', true ); ?>
+				<?php
+					$image_id = get_term_meta( $term->term_id, 'category-image-id', true );
+					$add_image_class = ! empty( $image_id ) ? 'hcms_hide' : '';
+					$remove_image_class = empty( $image_id ) ? 'hcms_hide' : '';
+				?>
 				<input type="hidden" id="category-image-id" name="category-image-id" value="<?php echo esc_url( $image_id ); ?>">
 				<div id="category-image-wrapper">
 					<?php if ( $image_id ) { ?>
 						<?php echo wp_get_attachment_image( $image_id, 'thumbnail' ); ?>
 					<?php } ?>
 				</div>
-				<p>
-					<input type="button" class="button button-secondary hcms_tax_media_button" id="hcms_tax_media_button" name="hcms_tax_media_button" value="<?php esc_html_e( 'Add Image', 'headless-cms' ); ?>" />
-					<input type="button" class="button button-secondary hcms_tax_media_remove" id="hcms_tax_media_remove" name="hcms_tax_media_remove" value="<?php esc_html_e( 'Remove Image', 'headless-cms' ); ?>" />
-				</p>
+				<div>
+					<input type="button" class="button button-secondary hcms_tax_media_button <?php esc_attr_e( $add_image_class ); ?>" id="hcms_tax_media_button" name="hcms_tax_media_button" value="<?php esc_html_e( 'Add Image', 'headless-cms' ); ?>" />
+					<input type="button" class="button button-secondary hcms_tax_media_remove <?php esc_attr_e( $remove_image_class ); ?>" id="hcms_tax_media_remove" name="hcms_tax_media_remove" value="<?php esc_html_e( 'Remove Image', 'headless-cms' ); ?>" />
+				</div>
 			</td>
 		</tr>
 		<?php

@@ -40,6 +40,8 @@ import '../scss/category.scss';
 			$( 'body' ).on( 'click', '.hcms_tax_media_remove', function () {
 				$( '#category-image-id' ).val( '' );
 				$( '#category-image-wrapper' ).html( '<img class="custom_media_image" src="" style="margin:0;padding:0;max-height:100px;float:none;" />' );
+				$( '#hcms_tax_media_button' ).toggleClass( 'hcms_hide' );
+				$( '#hcms_tax_media_remove' ).toggleClass( 'hcms_hide' );
 			} );
 		}
 
@@ -56,6 +58,8 @@ import '../scss/category.scss';
 						$( '#category-image-id' ).val( attachment.id );
 						$( '#category-image-wrapper' ).html( '<img class="custom_media_image" src=""/>' );
 						$( '#category-image-wrapper .custom_media_image' ).attr( 'src', attachment.url ).css( 'display', 'block' );
+						$( '#hcms_tax_media_button' ).toggleClass( 'hcms_hide' );
+						$( '#hcms_tax_media_remove' ).toggleClass( 'hcms_hide' );
 					} else {
 						return origSendAttachment.apply( btnID, [ props, attachment ] );
 					}
