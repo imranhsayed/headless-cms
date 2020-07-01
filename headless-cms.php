@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Headless CMS
  * Description: A WordPress plugin that adds features to use WordPress as a headless CMS with any front-end environment using REST API
- * Plugin URI:  https://codeytek.com
+ * Plugin URI:  https://codeytek.com/headless-cms-wordpress-plugin
  * Author:      Imran Sayed
  * Author URI:  https://codeytek.com
  * License:     GPL2

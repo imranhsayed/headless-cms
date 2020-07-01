@@ -112,8 +112,8 @@ I use [Git](https://github.com/) for versioning.
 
 * **[Imran Sayed](https://codeytek.com)**
 
-## License :page_facing_up:
+## License :scroll:
 
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)
 
-- **[MIT license](http://opensource.org/licenses/mit-license.php)**
+- **[GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)**
