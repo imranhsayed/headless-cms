@@ -77,8 +77,8 @@ class Category {
 			</th>
 			<td>
 				<?php
-					$image_id = get_term_meta( $term->term_id, 'category-image-id', true );
-					$add_image_class = ! empty( $image_id ) ? 'hcms_hide' : '';
+					$image_id           = get_term_meta( $term->term_id, 'category-image-id', true );
+					$add_image_class    = ! empty( $image_id ) ? 'hcms_hide' : '';
 					$remove_image_class = empty( $image_id ) ? 'hcms_hide' : '';
 				?>
 				<input type="hidden" id="category-image-id" name="category-image-id" value="<?php echo esc_url( $image_id ); ?>">
@@ -88,8 +88,8 @@ class Category {
 					<?php } ?>
 				</div>
 				<div>
-					<input type="button" class="button button-secondary hcms_tax_media_button <?php esc_attr_e( $add_image_class ); ?>" id="hcms_tax_media_button" name="hcms_tax_media_button" value="<?php esc_html_e( 'Add Image', 'headless-cms' ); ?>" />
-					<input type="button" class="button button-secondary hcms_tax_media_remove <?php esc_attr_e( $remove_image_class ); ?>" id="hcms_tax_media_remove" name="hcms_tax_media_remove" value="<?php esc_html_e( 'Remove Image', 'headless-cms' ); ?>" />
+					<input type="button" class="button button-secondary hcms_tax_media_button <?php echo esc_attr( $add_image_class ); ?>" id="hcms_tax_media_button" name="hcms_tax_media_button" value="<?php esc_html_e( 'Add Image', 'headless-cms' ); ?>" />
+					<input type="button" class="button button-secondary hcms_tax_media_remove <?php echo esc_attr( $remove_image_class ); ?>" id="hcms_tax_media_remove" name="hcms_tax_media_remove" value="<?php esc_html_e( 'Remove Image', 'headless-cms' ); ?>" />
 				</div>
 			</td>
 		</tr>
