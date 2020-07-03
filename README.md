@@ -105,7 +105,7 @@ Example of front-end applications where this plugin can be used:
 
 ### Get header and footer date: ( GET Request )
 * Get the header data ( site title, site description , site logo URL, menu items ) and footer data ( footer menu items, social icons )
-* `http://example.com/wp-json/rae/v1/header-footer?header_location_id=primary&footer_location_id=secondary`
+* `http://example.com/wp-json/rae/v1/header-footer?header_location_id=hcms-menu-header&footer_location_id=hcms-menu-footer`
 
 ## Contributing :busts_in_silhouette:
 

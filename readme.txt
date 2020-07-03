@@ -1,6 +1,6 @@
 === Headless CMS ===
 Contributors: gsayed786
-Tags: headless-cms, decoupled
+Tags: headless-cms, decoupled, graphql
 Requires at least: 4.6
 Tested up to: 5.4.2
 Stable tag: 4.9.2
@@ -40,7 +40,7 @@ This plugin provides multiple features and you can use the one's that is relevan
 
 3. Get header and footer date: ( GET Request )
 * Get the header data ( site title, site description , site logo URL, menu items ) and footer data ( footer menu items, social icons )
-* `http://example.com/wp-json/rae/v1/header-footer?header_location_id=primary&footer_location_id=secondary`
+* `http://example.com/wp-json/rae/v1/header-footer?header_location_id=hcms-menu-header&footer_location_id=hcms-menu-footer``
 
 4. Get posts by page no: ( GET Request )
 * Get the posts by taxonomy
