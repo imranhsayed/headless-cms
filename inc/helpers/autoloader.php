@@ -77,7 +77,12 @@ function autoloader( $resource = '' ) {
 
 	}
 
-	if ( ! empty( $resource_path ) && file_exists( $resource_path ) && 0 === validate_file( $resource_path ) ) {
+	/**
+	 * If $is_valid_file has 0 means valid path or 2 means the file path contains a Windows drive path.
+	 */
+	$is_valid_file = validate_file( $resource_path );
+
+	if ( ! empty( $resource_path ) && file_exists( $resource_path ) && ( 0 === $is_valid_file || 2 === $is_valid_file ) ) {
 		// We already making sure that file is exists and valid.
 		require_once( $resource_path ); // phpcs:ignore
 	}
