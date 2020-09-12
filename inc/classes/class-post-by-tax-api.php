@@ -68,6 +68,7 @@ class Post_By_Tax_Api {
 			[
 				'method'   => 'GET',
 				'callback' => [ $this, 'rest_endpoint_handler' ],
+				'permission_callback' => '__return_true',
 			]
 		);
 	}

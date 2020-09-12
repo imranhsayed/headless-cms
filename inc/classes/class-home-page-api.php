@@ -71,6 +71,7 @@ class Home_Page_Api {
 			[
 				'methods'  => 'GET',
 				'callback' => [ $this, 'rest_endpoint_handler' ],
+				'permission_callback' => '__return_true',
 			]
 		);
 	}
