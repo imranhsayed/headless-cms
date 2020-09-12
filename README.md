@@ -12,6 +12,16 @@ You don't necessarily need to use all.
 <img src="https://codeytek.com/wp-content/uploads/2020/07/banner-1544x500-1.png" alt="Headless CMS WordPress Plugin" />
 </a>
 
+## Install via Composer
+
+```shell script
+composer require imranhsayed/headless-cms
+```
+
+## Install from WordPress.org
+
+Download and activate plugin from [WordPress.org](https://wordpress.org/plugins/headless-cms/)
+
 ## Maintainer
 
 | Name                                                   | Github Username |
