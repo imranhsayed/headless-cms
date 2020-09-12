@@ -8,6 +8,9 @@
 	"wordpress",
 	"plugin"
   ],
+  "require": {
+	"php": ">=5.4.0"
+  },
   "homepage": "https://github.com/imranhsayed/headless-cms",
   "authors": [
 	{
