@@ -32,6 +32,7 @@ class Plugin {
 		Category::get_instance();
 		Settings::get_instance();
 		Header_Footer_Schema::get_instance();
+		Sticky_Post_Type::get_instance();
 
 	}
 
