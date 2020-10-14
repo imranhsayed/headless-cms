@@ -50,7 +50,7 @@ class Co_Authors {
 				'type'        => 'String',
 				'description' => __( 'Co Authors', 'wp-graphql' ),
 				'resolve'     => function ($post) {
-					return wp_json_encode( get_coauthors( $post->ID ) );
+					return function_exists( 'get_coauthors' ) ? wp_json_encode( get_coauthors( $post->ID ) ) : '';
 				},
 			]
 		);
