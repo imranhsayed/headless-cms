@@ -1,11 +1,11 @@
 <?php
 /**
- * Home_Page_Api class.
+ * Home_Page class.
  *
  * @package headless-cms
  */
 
-namespace Headless_CMS\Features\Inc;
+namespace Headless_CMS\Features\Inc\Api;
 
 use Headless_CMS\Features\Inc\Traits\Singleton;
 use WP_Error;
@@ -14,9 +14,9 @@ use WP_REST_Request;
 use WP_REST_Response;
 
 /**
- * Class Home_Page_Api
+ * Class Home_Page
  */
-class Home_Page_Api {
+class Home_Page {
 
 	use Singleton;
 

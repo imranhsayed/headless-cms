@@ -1,11 +1,11 @@
 <?php
 /**
- * Get_Posts_Api class.
+ * Get_Posts class.
  *
  * @package headless-cms
  */
 
-namespace Headless_CMS\Features\Inc;
+namespace Headless_CMS\Features\Inc\Api;
 
 use Headless_CMS\Features\Inc\Traits\Singleton;
 use WP_Error;
@@ -14,9 +14,9 @@ use WP_REST_Response;
 use WP_Query;
 
 /**
- * Class Get_Posts_Api
+ * Class Get_Posts
  */
-class Get_Posts_Api {
+class Get_Posts {
 
 	use Singleton;
 

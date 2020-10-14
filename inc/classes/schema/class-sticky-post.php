@@ -5,14 +5,14 @@
  * @package headless-cms
  */
 
-namespace Headless_CMS\Features\Inc;
+namespace Headless_CMS\Features\Inc\Schema;
 
 use Headless_CMS\Features\Inc\Traits\Singleton;
 
 /**
- * Class Sticky_Post_Type
+ * Class Sticky_Post
  */
-class Sticky_Post_Type {
+class Sticky_Post {
 
 	use Singleton;
 

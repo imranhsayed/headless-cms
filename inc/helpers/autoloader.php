@@ -57,6 +57,8 @@ function autoloader( $resource = '' ) {
 			case 'blocks':
 			case 'meta-boxes':
 			case 'widgets':
+			case 'schema':
+			case 'api':
 			case 'plugin-configs': // phpcs:ignore PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
 				/**
 				 * If there is class name provided for specific directory then load that.

@@ -5,7 +5,7 @@
  * @package headless-cms
  */
 
-namespace Headless_CMS\Features\Inc;
+namespace Headless_CMS\Features\Inc\Api;
 
 use Headless_CMS\Features\Inc\Traits\Singleton;
 use WP_Error;

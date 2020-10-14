@@ -1,11 +1,11 @@
 <?php
 /**
- * Post_By_Tax_Api class.
+ * Post_By_Tax class.
  *
  * @package headless-cms
  */
 
-namespace Headless_CMS\Features\Inc;
+namespace Headless_CMS\Features\Inc\Api;
 
 use Headless_CMS\Features\Inc\Traits\Singleton;
 use WP_Error;
@@ -14,9 +14,9 @@ use WP_REST_Request;
 use WP_REST_Response;
 
 /**
- * Class Post_By_Tax_Api
+ * Class Post_By_Tax
  */
-class Post_By_Tax_Api {
+class Post_By_Tax {
 
 	use Singleton;
 
