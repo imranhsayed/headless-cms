@@ -57,6 +57,7 @@ class Post_Schema {
 			]
 		);
 
+		// Register bodyClasses type for Posts.
 		register_graphql_field(
 			'Post',
 			'bodyClasses',
@@ -64,13 +65,39 @@ class Post_Schema {
 				'type'        => 'String',
 				'description' => __( 'bodyClasses', 'headless-cms' ),
 				'resolve'     => function ($post) {
-					$body_classes = array_merge( [], get_body_class() );
-					$body_classes = implode( ' ', $body_classes );
-					$body_classes = $body_classes . sprintf( ' elementor-default elementor-kit-%1$s elementor-page elementor-page-%1$s', $post->ID );
-					return $body_classes;
+					return $this->get_body_classes($post);
 				},
 			]
 		);
+
+		// Register bodyClasses type for Page.
+		register_graphql_field(
+			'Page',
+			'bodyClasses',
+			[
+				'type'        => 'String',
+				'description' => __( 'bodyClasses', 'headless-cms' ),
+				'resolve'     => function ($post) {
+					return $this->get_body_classes($post);
+				},
+			]
+		);
+	}
+
+	/**
+	 * Get body classes including elementor classes.
+	 *
+	 * @param Object $post Post.
+	 *
+	 * @return string Body classes.
+	 */
+	public function get_body_classes( $post ) {
+		$body_classes = array_merge( [], get_body_class() );
+		$body_classes = implode( ' ', $body_classes );
+		$elementor_kit_post = get_page_by_title('Default Kit', OBJECT, 'elementor_library');
+		$elementor_kit_post_id = ! empty( $elementor_kit_post ) ? $elementor_kit_post->ID : '';
+		$body_classes = $body_classes . sprintf( ' elementor-default elementor-kit-%1$s elementor-page elementor-page-%2$s', $elementor_kit_post_id, $post->ID );
+		return $body_classes;
 	}
 
 }
