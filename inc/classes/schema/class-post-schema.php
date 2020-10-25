@@ -1,6 +1,8 @@
 <?php
 /**
- * Register coAuthors GraphQL type.
+ * Register more GraphQL types for Post.
+ *
+ * e.g. coAuthors, bodyClasses
  *
  * @package headless-cms
  */
@@ -10,9 +12,9 @@ namespace Headless_CMS\Features\Inc\Schema;
 use Headless_CMS\Features\Inc\Traits\Singleton;
 
 /**
- * Class Co_Authors
+ * Class Post_Schema
  */
-class Co_Authors {
+class Post_Schema {
 
 	use Singleton;
 
@@ -42,7 +44,7 @@ class Co_Authors {
 	 */
 	public function register_graphql_fields() {
 
-		// Sticky Post Ids
+		// coAuthors
 		register_graphql_field(
 			'Post',
 			'coAuthors',
@@ -51,6 +53,18 @@ class Co_Authors {
 				'description' => __( 'Co Authors', 'wp-graphql' ),
 				'resolve'     => function ($post) {
 					return function_exists( 'get_coauthors' ) ? wp_json_encode( get_coauthors( $post->ID ) ) : '';
+				},
+			]
+		);
+
+		register_graphql_field(
+			'Post',
+			'bodyClasses',
+			[
+				'type'        => 'String',
+				'description' => __( 'bodyClasses', 'headless-cms' ),
+				'resolve'     => function ($post) {
+					return wp_json_encode( get_body_class() );
 				},
 			]
 		);
