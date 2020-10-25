@@ -64,7 +64,10 @@ class Post_Schema {
 				'type'        => 'String',
 				'description' => __( 'bodyClasses', 'headless-cms' ),
 				'resolve'     => function ($post) {
-					return wp_json_encode( get_body_class() );
+					$body_classes = array_merge( [], get_body_class() );
+					$body_classes = implode( ' ', $body_classes );
+					$body_classes = $body_classes . sprintf( ' elementor-default elementor-kit-%1$s elementor-page elementor-page-%1$s', $post->ID );
+					return $body_classes;
 				},
 			]
 		);
