@@ -14,6 +14,7 @@ use Headless_CMS\Features\Inc\Api\Home_Page;
 use Headless_CMS\Features\Inc\Api\Post_By_Tax;
 use Headless_CMS\Features\Inc\Schema\Header_Footer_Schema;
 use Headless_CMS\Features\Inc\Schema\Post_Schema;
+use Headless_CMS\Features\Inc\Schema\Seo;
 use Headless_CMS\Features\Inc\Schema\Sticky_Post;
 use \Headless_CMS\Features\Inc\Traits\Singleton;
 
@@ -46,6 +47,7 @@ class Plugin {
 		Header_Footer_Schema::get_instance();
 		Sticky_Post::get_instance();
 		Post_Schema::get_instance();
+		Seo::get_instance();
 
 	}
 
