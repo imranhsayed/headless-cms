@@ -117,3 +117,20 @@ function hcms_theme_support() {
 }
 
 add_action( 'after_setup_theme', 'hcms_theme_support' );
+
+/**
+ * Back to React Theme's home page.
+ */
+function hcms_back_to_home_button() {
+	
+	$frontend_site_url = ! empty( $option_val_array['frontend_site_url'] ) ? $option_val_array['frontend_site_url'] : 'https://gatsby-woocommerce-theme.netlify.app';
+	
+	printf(
+		'<a href="%1$s">%2$s</a>',
+		esc_url( $frontend_site_url ),
+		__('Back to Home', 'headless-cms')
+	);
+	
+}
+
+add_action( 'woocommerce_order_details_after_order_table', 'hcms_back_to_home_button', 10 );
