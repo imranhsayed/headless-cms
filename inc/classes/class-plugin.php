@@ -48,6 +48,9 @@ class Plugin {
 		Sticky_Post::get_instance();
 		Post_Schema::get_instance();
 		Seo::get_instance();
+		
+		// Preview.
+		Preview::get_instance();
 
 	}
 
