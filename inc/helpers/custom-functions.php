@@ -134,3 +134,12 @@ function hcms_back_to_home_button() {
 }
 
 add_action( 'woocommerce_order_details_after_order_table', 'hcms_back_to_home_button', 10 );
+
+add_filter( 'graphql_jwt_auth_secret_key', function() {
+	$plugin_options = get_option( 'hcms_plugin_options' );
+	if ( ! is_array($plugin_options) && empty( $plugin_options['jwt_secret'] ) ) {
+		return '';
+	}
+	
+	return $plugin_options['jwt_secret'];
+});

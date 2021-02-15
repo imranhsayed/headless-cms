@@ -1,6 +1,7 @@
 {
   "category.css": "css/category.css",
   "category.js": "js/category.js",
+  "editor.js": "js/editor.js",
   "settings.css": "css/settings.css",
   "settings.js": "js/settings.js"
 }
