@@ -1,5 +1,5 @@
 /**
- * Slot fill for email preview button.
+ * Slot fill for preview button.
  *
  * @package headless-cms
  */
