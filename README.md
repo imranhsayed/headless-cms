@@ -83,7 +83,8 @@ Example of front-end applications where this plugin can be used:
 
 ![](assets/images/screenshot-5.png)
 
-* Adds frontend preview link option.
+* Adds frontend preview link option in the editor.
+For Preview to work , you also need the [wp-graphql-jwt-authentication](https://github.com/wp-graphql/wp-graphql-jwt-authentication) plugin as well
 
 ### More Features
 1. Registers the sections for socials icons in the customizer
