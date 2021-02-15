@@ -34,6 +34,7 @@ class Assets {
 		 * Action
 		 */
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'enqueue_editor_assets' ] );
 
 	}
 
@@ -66,6 +67,31 @@ class Assets {
 			wp_enqueue_script( 'media-uploader' );
 		}
 
+	}
+	
+	/**
+	 * Enqueue editor scripts.
+	 */
+	public function enqueue_editor_assets() {
+		
+		$plugin_settings               = get_option('hcms_plugin_options');
+		$is_custom_preview_link_active = is_array($plugin_settings) && !empty($plugin_settings['activate_preview']) ? $plugin_settings['activate_preview'] : false;
+		$frontend_site_url             = is_array($plugin_settings) && !empty($plugin_settings['frontend_site_url']) ? $plugin_settings['frontend_site_url'] : '';
+		
+		// Theme Editor JS.
+		if ( is_admin() ) {
+			wp_enqueue_script(
+				'hcms-editor-js',
+				HEADLESS_CMS_BUILD_URI . '/js/editor.js',
+				[],
+				'1.1',
+				true
+			);
+			wp_localize_script( 'hcms-editor-js', 'frontendConfig', [
+				'isPreviewLinkActive' => $is_custom_preview_link_active,
+				'frontendSiteUrl'     => $frontend_site_url
+			] );
+		}
 	}
 
 }

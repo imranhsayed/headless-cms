@@ -4,9 +4,10 @@
 	"description": "Plugin for features",
 	"main": "src/js/index.js",
 	"scripts": {
-		"prod": "cross-env NODE_ENV=production webpack --mode production --progress",
+		"build": "cross-env NODE_ENV=production webpack --mode production --progress",
 		"dev": "cross-env NODE_ENV=development webpack --watch --mode development --progress",
-		"eslint:fix": "eslint --fix"
+		"lint": "eslint src/js/*",
+		"lint:fix": "eslint --fix src/js/*"
 	},
 	"keywords": [
 		"features-plugin"
@@ -14,15 +15,15 @@
 	"author": "rtCamp",
 	"license": "ISC",
 	"dependencies": {
-		"@babel/preset-react": "^7.8.0",
+		"@babel/preset-react": "^7.12.13",
 		"@wordpress/eslint-plugin": "^3.3.0",
 		"eslint-plugin-jsdoc": "^20.3.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.1.2",
-		"@babel/preset-env": "^7.1.0",
-		"autoprefixer": "^9.1.5",
-		"babel-loader": "^8.0.4",
+		"@babel/core": "^7.12.16",
+		"@babel/preset-env": "^7.12.16",
+		"autoprefixer": "^9.8.6",
+		"babel-loader": "^8.2.2",
 		"clean-webpack-plugin": "^0.1.19",
 		"cross-env": "^5.2.0",
 		"css-loader": "^1.0.0",
@@ -36,10 +37,10 @@
 		"friendly-errors-webpack-plugin": "^1.7.0",
 		"fs-extra": "^7.0.0",
 		"jest": "^24.7.1",
-		"jquery": "^3.3.1",
+		"jquery": "^3.5.1",
 		"mini-css-extract-plugin": "^0.4.3",
-		"node-sass": "^4.9.3",
-		"optimize-css-assets-webpack-plugin": "^5.0.1",
+		"node-sass": "^4.14.1",
+		"optimize-css-assets-webpack-plugin": "^5.0.4",
 		"postcss-assets": "^5.0.0",
 		"prompt-sync": "^4.1.6",
 		"replace-in-file": "^3.4.2",
@@ -51,8 +52,8 @@
 		"stylelint-config-wordpress": "^13.1.0",
 		"stylelint-webpack-plugin": "^0.10.5",
 		"uglifyjs-webpack-plugin": "^2.0.1",
-		"webpack": "^4.20.2",
+		"webpack": "^4.46.0",
 		"webpack-assets-manifest": "^3.1.0",
-		"webpack-cli": "^3.1.2"
+		"webpack-cli": "^3.3.12"
 	}
 }
