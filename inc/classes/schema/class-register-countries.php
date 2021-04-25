@@ -44,11 +44,26 @@ class Register_Countries {
 	 */
 	public function register_countries_fields() {
 
+		register_graphql_object_type( 'WooCountry', [
+			'fields' => [
+				'countryCode'  => [ 'type' => 'String' ],
+				'countryName' => [ 'type' => 'String' ],
+			]
+		] );
+
 		register_graphql_object_type( 'WooCountries', [
 			'description' => __( 'Countries Type', 'headless-cms' ),
 			'fields'      => [
-				'billingCountries'  => [ 'type' => 'String' ],
-				'shippingCountries' => [ 'type' => 'String' ],
+				'billingCountries'   => [
+					'type' => [
+						'list_of' => 'WooCountry'
+					]
+				],
+				'shippingCountries'   => [
+					'type' => [
+						'list_of' => 'WooCountry'
+					]
+				],
 			],
 		] );
 
@@ -63,10 +78,12 @@ class Register_Countries {
 					// All countries for billing.
 					$all_countries     = class_exists( 'WooCommerce' ) ? WC()->countries : [];
 					$billing_countries = ! empty( $all_countries->countries ) ? $all_countries->countries : [];
+					$billing_countries = $this->get_formatted_countries( $billing_countries );
 
 					// All countries with states for shipping.
 					$shipping_countries = class_exists( 'WooCommerce' ) ? WC()->countries->get_shipping_countries() : [];;
 					$shipping_countries = ! empty( $shipping_countries ) ? $shipping_countries : [];
+					$shipping_countries = $this->get_formatted_countries( $shipping_countries );
 
 					/**
 					 * Here you need to return data that matches the shape of the "WooCountries" type. You could get
@@ -74,13 +91,31 @@ class Register_Countries {
 					 * For example in this case we are getting it from WordPress database.
 					 */
 					return [
-						'billingCountries'  => wp_json_encode( $billing_countries ),
-						'shippingCountries' => wp_json_encode( $shipping_countries ),
+						'billingCountries'  => $billing_countries,
+						'shippingCountries' => $shipping_countries,
 					];
 
 				},
 			]
 		);
+	}
+
+	public function get_formatted_countries( $countries ) {
+
+		$formatted_countries = [];
+
+		if ( empty( $countries ) && !is_array( $countries ) ) {
+			return $formatted_countries;
+		}
+
+		foreach ( $countries as $countryCode => $countryName ) {
+			array_push( $formatted_countries, [
+				'countryCode' => $countryCode,
+				'countryName' => $countryName,
+			] );
+		}
+
+		return $formatted_countries;
 	}
 
 }
