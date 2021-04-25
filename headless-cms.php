@@ -7,7 +7,7 @@
  * Author URI:  https://codeytek.com
  * License:     GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Version:     1.4.0
+ * Version:     1.5.0
  * Text Domain: headless-cms
  *
  * @package headless-cms
@@ -34,3 +34,32 @@ function headless_cms_features_plugin_loader() {
 }
 
 headless_cms_features_plugin_loader();
+
+
+
+//function hello() {
+//
+//	if ( !class_exists('WooCommerce') ) {
+//		return [];
+//	}
+//
+//	$countries_with_country_codes = WC()->countries;
+//	$all_countries = WC()->countries->get_states();
+//	$countries_with_states = [];
+//
+//	if ( empty( $all_countries ) && !is_array( $all_countries ) ) {
+//		return [];
+//	}
+//
+//	foreach ( $all_countries as $country_code => $states ) {
+//		if ( ! empty( $states ) ) {
+//			$countries_with_states[$country_code] = $country_code;
+//		}
+//	}
+//
+//	echo '<pre/>';
+//	print_r($countries_with_country_codes);
+//	wp_die();
+//}
+//
+//add_action('init', 'hello' );
