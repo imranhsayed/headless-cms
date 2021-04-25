@@ -91,7 +91,7 @@ class Header_Footer_Schema {
 				'resolve'     => function () {
 
 					/**
-					 * Here you need to return data that matches the shape of the "Dog" type. You could get
+					 * Here you need to return data that matches the shape of the "HCMSHeader" type. You could get
 					 * the data from the WP Database, an external API, or static values.
 					 * For example in this case we are getting it from WordPress database.
 					 */
@@ -152,7 +152,7 @@ class Header_Footer_Schema {
 				'resolve'     => function () {
 
 					/**
-					 * Here you need to return data that matches the shape of the "Dog" type. You could get
+					 * Here you need to return data that matches the shape of the "HCMSFooter" type. You could get
 					 * the data from the WP Database, an external API, or static values.
 					 * For example in this case we are getting it from WordPress database.
 					 */

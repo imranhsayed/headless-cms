@@ -34,7 +34,7 @@ class Register_Countries {
 		 * Action
 		 */
 
-		// Register Header Type and Field.
+		// Register Countries Field.
 		add_action( 'graphql_register_types', [ $this, 'register_countries_fields' ] );
 
 	}
@@ -45,7 +45,7 @@ class Register_Countries {
 	function register_countries_fields() {
 
 		register_graphql_object_type( 'WooCountries', [
-			'description' => __( 'Shipping Zones Type', 'headless-cms' ),
+			'description' => __( 'Countries Type', 'headless-cms' ),
 			'fields' => [
 				'countries'  => [ 'type' => 'String' ],
 			]
@@ -62,7 +62,7 @@ class Register_Countries {
 					$countries = class_exists('WooCommerce') ? WC()->countries : [];
 
 					/**
-					 * Here you need to return data that matches the shape of the "Dog" type. You could get
+					 * Here you need to return data that matches the shape of the "WooCountries" type. You could get
 					 * the data from the WP Database, an external API, or static values.
 					 * For example in this case we are getting it from WordPress database.
 					 */

@@ -70,7 +70,7 @@ class Register_States {
 					}
 
 					/**
-					 * Here you need to return data that matches the shape of the "Dog" type. You could get
+					 * Here you need to return data that matches the shape of the "WooStates" type. You could get
 					 * the data from the WP Database, an external API, or static values.
 					 * For example in this case we are getting it from WordPress database.
 					 */

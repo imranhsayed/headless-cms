@@ -64,7 +64,7 @@ class Register_Shipping {
 					$store_post_code = class_exists('WooCommerce') ? WC()->countries->get_base_postcode() : 0;
 
 					/**
-					 * Here you need to return data that matches the shape of the "Dog" type. You could get
+					 * Here you need to return data that matches the shape of the "ShippingInfo" type. You could get
 					 * the data from the WP Database, an external API, or static values.
 					 * For example in this case we are getting it from WordPress database.
 					 */
