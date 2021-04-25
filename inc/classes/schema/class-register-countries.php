@@ -60,14 +60,13 @@ class Register_Countries {
 				'type'        => 'WooCountries',
 				'resolve'     => function () {
 
-					// All countries with states for billing.
-					$all_countries                 = class_exists( 'WooCommerce' ) ? WC()->countries : [];
-					$all_countries                 = ! empty( $all_countries->countries ) ? $all_countries->countries : [];
-					$billing_countries_with_states = $this->get_countries_having_states( $all_countries );
+					// All countries for billing.
+					$all_countries     = class_exists( 'WooCommerce' ) ? WC()->countries : [];
+					$billing_countries = ! empty( $all_countries->countries ) ? $all_countries->countries : [];
 
 					// All countries with states for shipping.
 					$shipping_countries = class_exists( 'WooCommerce' ) ? WC()->countries->get_shipping_countries() : [];;
-					$shipping_countries_with_states = $this->get_countries_having_states( $shipping_countries );
+					$shipping_countries = ! empty( $shipping_countries ) ? $shipping_countries : [];
 
 					/**
 					 * Here you need to return data that matches the shape of the "WooCountries" type. You could get
@@ -75,42 +74,13 @@ class Register_Countries {
 					 * For example in this case we are getting it from WordPress database.
 					 */
 					return [
-						'billingCountries'  => wp_json_encode( $billing_countries_with_states ),
-						'shippingCountries' => wp_json_encode( $shipping_countries_with_states ),
+						'billingCountries'  => wp_json_encode( $billing_countries ),
+						'shippingCountries' => wp_json_encode( $shipping_countries ),
 					];
 
 				},
 			]
 		);
-	}
-
-	/**
-	 * Filters countries that have states.
-	 *
-	 * Excludes the one's that don't have states.
-	 */
-	public function get_countries_having_states( $all_countries ) {
-
-		$countries_with_states = [];
-
-		if ( ! class_exists( 'WooCommerce' ) || empty( $all_countries ) || !is_array($all_countries) ) {
-			return $countries_with_states;
-		}
-
-		$all_countries_with_states = WC()->countries->get_allowed_countries();
-
-		if ( empty( $all_countries_with_states ) && !is_array( $all_countries_with_states ) ) {
-			return $countries_with_states;
-		}
-
-		foreach ( $all_countries_with_states as $country_code => $states ) {
-			if ( ! empty( $states ) ) {
-				$countries_with_states[$country_code] = $all_countries[$country_code];
-			}
-		}
-
-		return $countries_with_states;
-
 	}
 
 }
