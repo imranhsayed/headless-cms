@@ -50,7 +50,7 @@ class Post_Schema {
 			'coAuthors',
 			[
 				'type'        => 'String',
-				'description' => __( 'Co Authors', 'wp-graphql' ),
+				'description' => __( 'Co Authors', 'headless-cms' ),
 				'resolve'     => function ($post) {
 					return function_exists( 'get_coauthors' ) ? wp_json_encode( get_coauthors( $post->ID ) ) : '';
 				},
