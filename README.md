@@ -117,7 +117,8 @@ For Preview to work , you also need the [wp-graphql-jwt-authentication](https://
 ```javascript
 {
   wooCountries {
-    countries
+    billingCountries
+    shippingCountries
   }
   wooStates(countryCode: "in") {
     states
