@@ -44,10 +44,21 @@ class Register_States {
 	 */
 	function register_states_fields() {
 
+		register_graphql_object_type( 'WooState', [
+			'fields' => [
+				'stateCode' => [ 'type' => 'String' ],
+				'stateName' => [ 'type' => 'String' ],
+			],
+		] );
+
 		register_graphql_object_type( 'WooStates', [
 			'description' => __( 'States Type', 'headless-cms' ),
 			'fields' => [
-				'states'  => [ 'type' => 'String' ],
+				'states'   => [
+					'type' => [
+						'list_of' => 'WooState'
+					]
+				],
 			]
 		] );
 
@@ -65,9 +76,12 @@ class Register_States {
 				'resolve'     => function ( $source, $args, $context, $info ) {
 					$states = [];
 
-					if ( isset( $args['countryCode'] ) && ! empty( $args['countryCode'] ) ) {
-						$states = class_exists( 'WooCommerce' ) ? WC()->countries->get_states( strtoupper($args['countryCode']) ) : [];
+					if ( ! class_exists( 'WooCommerce' ) ) {
+						return $states;
 					}
+
+					$states = isset( $args['countryCode'] ) && ! empty( $args['countryCode'] ) ? WC()->countries->get_states( strtoupper($args['countryCode']) ) : [];
+					$states = $this->get_formatted_states( $states );
 
 					/**
 					 * Here you need to return data that matches the shape of the "WooStates" type. You could get
@@ -75,12 +89,30 @@ class Register_States {
 					 * For example in this case we are getting it from WordPress database.
 					 */
 					return [
-						'states' => wp_json_encode($states),
+						'states' => $states,
 					];
 
 				},
 			]
 		);
+	}
+
+	public function get_formatted_states( $states ) {
+
+		$formatted_states = [];
+
+		if ( empty( $states ) && !is_array( $states ) ) {
+			return $formatted_states;
+		}
+
+		foreach ( $states as $stateCode => $stateName ) {
+			array_push( $formatted_states, [
+				'stateCode' => $stateCode,
+				'stateName' => $stateName,
+			] );
+		}
+
+		return $formatted_states;
 	}
 
 }
