@@ -107,8 +107,46 @@ For Preview to work , you also need the [wp-graphql-jwt-authentication](https://
 
 * Registers custom end points
 
-4. Custom Header and Footer GraphQL fields when using [wp-graphql](https://github.com/wp-graphql/wp-graphql) plugin.
+4. Following fields when using [wp-graphql](https://github.com/wp-graphql/wp-graphql) plugin.
+
+* Custom Header and Footer GraphQL
 ![](assets/images/screenshot-2.png)
+
+* WooCommerce Countries and States
+
+```javascript
+{
+  wooCountries {
+    countries
+  }
+  wooStates(countryCode: "in") {
+    states
+  }
+}
+```
+
+* WooCommerce Shipping Zones.
+
+```javascript
+{
+  shippingInfo {
+    shippingZones
+    storePostCode
+  }
+}
+```
+
+* Schema Details
+
+```javascript
+  posts {
+    nodes {
+      seo {
+        schemaDetails
+      }
+    }
+  }
+```
 
 ## Available Endpoints:
 
