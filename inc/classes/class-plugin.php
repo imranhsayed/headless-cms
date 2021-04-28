@@ -12,13 +12,15 @@ use Headless_CMS\Features\Inc\Api\Get_Posts;
 use Headless_CMS\Features\Inc\Api\Header_Footer_Api;
 use Headless_CMS\Features\Inc\Api\Home_Page;
 use Headless_CMS\Features\Inc\Api\Post_By_Tax;
-use Headless_CMS\Features\Inc\Schema\Header_Footer_Schema;
-use Headless_CMS\Features\Inc\Schema\Post_Schema;
-use Headless_CMS\Features\Inc\Schema\Register_Countries;
-use Headless_CMS\Features\Inc\Schema\Register_Shipping;
-use Headless_CMS\Features\Inc\Schema\Register_States;
-use Headless_CMS\Features\Inc\Schema\Seo;
-use Headless_CMS\Features\Inc\Schema\Sticky_Post;
+use Headless_CMS\Features\Inc\Mutations\Add_Wishlist;
+use Headless_CMS\Features\Inc\Mutations\Delete_Wishlist;
+use Headless_CMS\Features\Inc\Queries\Header_Footer_Schema;
+use Headless_CMS\Features\Inc\Queries\Post_Schema;
+use Headless_CMS\Features\Inc\Queries\Register_Countries;
+use Headless_CMS\Features\Inc\Queries\Register_Shipping;
+use Headless_CMS\Features\Inc\Queries\Register_States;
+use Headless_CMS\Features\Inc\Queries\Seo;
+use Headless_CMS\Features\Inc\Queries\Sticky_Post;
 use \Headless_CMS\Features\Inc\Traits\Singleton;
 
 /**
@@ -46,7 +48,7 @@ class Plugin {
 		Home_Page::get_instance();
 		Post_By_Tax::get_instance();
 
-		// Schemas.
+		// Queries.
 		Header_Footer_Schema::get_instance();
 		Sticky_Post::get_instance();
 		Post_Schema::get_instance();
@@ -54,6 +56,10 @@ class Plugin {
 		Register_Countries::get_instance();
 		Register_States::get_instance();
 		Register_Shipping::get_instance();
+
+		// Mutations
+		Add_Wishlist::get_instance();
+		Delete_Wishlist::get_instance();
 
 		// Preview.
 		Preview::get_instance();
