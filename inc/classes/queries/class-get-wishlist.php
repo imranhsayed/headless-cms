@@ -76,6 +76,7 @@ class Get_Wishlist {
 					],
 				],
 				'products'   => [ 'type' => [ 'list_of' => 'WishlistProduct' ] ],
+				'error'      => [ 'type' => 'String' ],
 			],
 		] );
 
@@ -85,24 +86,25 @@ class Get_Wishlist {
 			[
 				'description' => __( 'States', 'headless-cms' ),
 				'type'        => 'WishlistProducts',
-				'args'        => [
-					'userId' => [
-						'type' => 'Integer',
-					],
-				],
 				'resolve'     => function ( $source, $args, $context, $info ) {
-					$wishlist_products = [];
+					$wishlist_products = [
+						'productIds' => [],
+						'products'   => [],
+					];;
 
 					if ( ! class_exists( 'WooCommerce' ) ) {
 						return $wishlist_products;
 					}
 
-					// User id not passed in the args
-					if ( ! isset( $args['userId'] ) && empty( $args['userId'] ) ) {
+					$user_id = get_current_user_id();
+
+					if ( ! $user_id ) {
+						$wishlist_products['error'] = __( 'Request is not authenticated', 'headless-cms' );
+
 						return $wishlist_products;
 					}
 
-					$saved_product_ids  = (array) get_user_meta( $args['userId'], 'wc_next_saved_products', true );
+					$saved_product_ids  = (array) get_user_meta( $user_id, 'wc_next_saved_products', true );
 					$wish_list_products = $this->prepare_wishlist_items_for_response( $saved_product_ids );
 
 					/**
@@ -110,10 +112,10 @@ class Get_Wishlist {
 					 * the data from the WP Database, an external API, or static values.
 					 * For example in this case we are getting it from WordPress database.
 					 */
-					return [
-						'productIds' => array_filter( $saved_product_ids ),
-						'products'   => $wish_list_products,
-					];
+					$wishlist_products['productIds'] = array_filter( $saved_product_ids );
+					$wishlist_products['products']   = $wish_list_products;
+
+					return $wishlist_products;
 
 				},
 			]
@@ -163,7 +165,7 @@ class Get_Wishlist {
 	/**
 	 * Get the featured image for a product
 	 *
-	 * @param object $product Product
+	 * @param object $product      Product
 	 * @param string $product_name Product name
 	 *
 	 * @return array Featured image.

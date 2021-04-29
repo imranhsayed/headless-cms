@@ -59,10 +59,6 @@ class Delete_Wishlist {
 					'type'        => 'Integer',
 					'description' => __( 'Product id', 'headless-cms' ),
 				],
-				'userId'    => [
-					'type'        => 'Integer',
-					'description' => __( 'User id', 'headless-cms' ),
-				],
 			],
 
 			'outputFields' => [
@@ -88,13 +84,21 @@ class Delete_Wishlist {
 					'error'     => '',
 				];
 
-				if ( empty( $input['productId'] ) || empty( $input['userId'] ) ) {
-					$response['error'] = __( 'Please enter both product id and user id', 'headless-cms' );
+				if ( empty( $input['productId'] ) ) {
+					$response['error'] = __( 'Please enter a valid product id', 'headless-cms' );
 
 					return $response;
 				}
 
-				return $this->remove_item( $input['productId'], $input['userId'], $response );
+				$user_id = get_current_user_id();
+
+				if ( ! $user_id ) {
+					$response['error'] = __( 'Request is not authenticated', 'headless-cms' );
+
+					return $response;
+				}
+
+				return $this->remove_item( $input['productId'], $user_id, $response );
 			},
 		] );
 	}
@@ -106,13 +110,6 @@ class Delete_Wishlist {
 	 *
 	 */
 	public function remove_item( $product_id, $user_id, $response ) {
-
-		$current_user_id = get_current_user_id();
-
-		if ( $user_id !== $current_user_id ) {
-			$response['error'] = __( 'User id is not valid', 'headless-cms' );
-			return $response;
-		}
 
 		$saved_products = (array) get_user_meta( $user_id, 'wc_next_saved_products', true );
 		$key            = array_search( $product_id, $saved_products );

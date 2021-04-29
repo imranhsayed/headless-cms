@@ -59,10 +59,6 @@ class Add_Wishlist {
 					'type'        => 'Integer',
 					'description' => __( 'Product id', 'headless-cms' ),
 				],
-				'userId'    => [
-					'type'        => 'Integer',
-					'description' => __( 'User id', 'headless-cms' ),
-				],
 			],
 
 			'outputFields' => [
@@ -88,13 +84,21 @@ class Add_Wishlist {
 					'error'     => '',
 				];
 
-				if ( empty( $input['productId'] ) || empty( $input['userId'] ) ) {
-					$response['error'] = __( 'Please enter both product id and user id', 'headless-cms' );
+				if ( empty( $input['productId'] ) ) {
+					$response['error'] = __( 'Please enter a valid product id', 'headless-cms' );
 
 					return $response;
 				}
 
-				return $this->save_products_to_wishlist( $input['productId'], $input['userId'], $response );
+				$user_id = get_current_user_id();
+
+				if ( ! $user_id ) {
+					$response['error'] = __( 'Request is not authenticated', 'headless-cms' );
+
+					return $response;
+				}
+
+				return $this->save_products_to_wishlist( $input['productId'], $user_id, $response );
 			},
 		] );
 	}
@@ -104,18 +108,12 @@ class Add_Wishlist {
 	 * Save products to wishlist
 	 *
 	 * @param int $product_id Product id
-	 * @param int $user_id User Id.
 	 * @param array $response Response.
+	 * @param int $user_id User id.
 	 *
 	 * @return array $response Response.
 	 */
 	public function save_products_to_wishlist( int $product_id, int $user_id, array $response ) {
-		$current_user_id = get_current_user_id();
-
-		if ( $user_id !== $current_user_id ) {
-			$response['error'] = __( 'User id is not valid', 'headless-cms' );
-			return $response;
-		}
 
 		// Check if the product id is valid else return error;
 		$product = wc_get_product( $product_id );
