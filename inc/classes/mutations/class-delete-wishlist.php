@@ -34,7 +34,7 @@ class Delete_Wishlist {
 		 * Action
 		 */
 
-		// Register Countries Field.
+		// Register Delete wishlist Mutation Types.
 		add_action( 'graphql_register_types', [ $this, 'delete_wishlist_mutation' ] );
 
 	}
@@ -118,16 +118,16 @@ class Delete_Wishlist {
 		$key            = array_search( $product_id, $saved_products );
 
 		if ( ! $key ) {
-			$response['error'] = __( 'Something went wrong', 'headless-cms' );
+			$response['error'] = __( 'Product does not exist in the wishlist', 'headless-cms' );
 
 			return $response;
 		}
 
 		unset( $saved_products[ $key ] );
-		$remove_product_from_wishlist = update_user_meta( $user_id, 'wc_next_saved_products', $saved_products );
+		$removed_product_from_wishlist = update_user_meta( $user_id, 'wc_next_saved_products', $saved_products );
 
-		if ( is_wp_error( $remove_product_from_wishlist ) ) {
-			$response['error'] = 'Something went wrong';
+		if ( is_wp_error( $removed_product_from_wishlist ) ) {
+			$response['error'] = __( 'Something went wrong in removing the product', 'headless-cms' );
 
 			return $response;
 		} else {

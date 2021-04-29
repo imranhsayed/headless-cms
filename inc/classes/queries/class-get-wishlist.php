@@ -34,7 +34,7 @@ class Get_Wishlist {
 		 * Action
 		 */
 
-		// Register States Field.
+		// Register Wishlist Field.
 		add_action( 'graphql_register_types', [ $this, 'register_get_wishlist_fields' ] );
 
 	}
@@ -46,15 +46,15 @@ class Get_Wishlist {
 
 		register_graphql_object_type( 'WishlistProductImage', [
 			'fields' => [
-				'id'   => [ 'type' => 'Integer' ],
-				'src'  => [ 'type' => 'String' ],
-				'name' => [ 'type' => 'String' ],
-				'alt'  => [ 'type' => 'String' ],
+				'attachmentId' => [ 'type' => 'Integer' ],
+				'src'          => [ 'type' => 'String' ],
+				'alt'          => [ 'type' => 'String' ],
 			],
 		] );
 
 		register_graphql_object_type( 'WishlistProduct', [
 			'fields' => [
+				'productId'     => [ 'type' => 'Integer' ],
 				'name'          => [ 'type' => 'String' ],
 				'slug'          => [ 'type' => 'String' ],
 				'type'          => [ 'type' => 'String' ],
@@ -75,7 +75,7 @@ class Get_Wishlist {
 						'list_of' => 'Integer',
 					],
 				],
-				'products'   => [ 'type' => 'WishlistProduct' ],
+				'products'   => [ 'type' => [ 'list_of' => 'WishlistProduct' ] ],
 			],
 		] );
 
@@ -111,7 +111,7 @@ class Get_Wishlist {
 					 * For example in this case we are getting it from WordPress database.
 					 */
 					return [
-						'productIds' => array_filter($saved_product_ids),
+						'productIds' => array_filter( $saved_product_ids ),
 						'products'   => $wish_list_products,
 					];
 
@@ -120,58 +120,73 @@ class Get_Wishlist {
 		);
 	}
 
-	public function prepare_wishlist_items_for_response( $product_ids ) {
-		$result   = [];
-		$args     = [
+	/**
+	 * Get the wishlist products with required data.
+	 *
+	 * @param array $product_ids Product Ids
+	 *
+	 * @return array $wishlist_products Wishlist products.
+	 */
+	public function prepare_wishlist_items_for_response( array $product_ids ) {
+		$wishlist_products = [];
+		$args              = [
 			'include' => $product_ids,
 		];
-		$products = wc_get_products( $args );
+		$products          = wc_get_products( $args );
+
+		if ( empty( $products ) || ! is_array( $products ) ) {
+			return $wishlist_products;
+		}
+
 		foreach ( $products as $product ) {
 			$product_data                  = [];
 			$data                          = $product->get_data();
-			$product_data['name']          = $data['name'];
-			$product_data['slug']          = $data['slug'];
+			$product_data['productId']     = ! empty( $data['id'] ) ? $data['id'] : 0;
+			$product_data['name']          = ! empty( $data['name'] ) ? $data['name'] : '';
+			$product_data['slug']          = ! empty( $data['slug'] ) ? $data['slug'] : '';
 			$product_data['type']          = $product->get_type();
 			$product_data['priceHtml']     = $product->get_price_html();
-			$product_data['image']         = $this->get_image( $product );
-			$product_data['buttonText']    = $data['button_text'];
-			$product_data['productUrl']    = $data['product_url'];
-			$product_data['stockStatus']   = $data['stock_status'];
+			$product_data['image']         = $this->get_image( $product, $data['name'] );
+			$product_data['buttonText']    = ! empty( $data['button_text'] ) ? $data['button_text'] : '';
+			$product_data['productUrl']    = ! empty( $data['product_url'] ) ? $data['product_url'] : '';
+			$product_data['stockStatus']   = ! empty( $data['stock_status'] ) ? $data['stock_status'] : '';
 			$product_data['stockQuantity'] = intval( $data['stock_quantity'] );
 
-			$result[] = $product_data;
+			// Push each product into the wishlist products array.
+			$wishlist_products[] = $product_data;
 		}
 
-		return $result;
+		return $wishlist_products;
 	}
 
+
 	/**
-	 * Get the image for a product
+	 * Get the featured image for a product
 	 *
-	 * @return array
-	 * @since 1.0.0
+	 * @param object $product Product
+	 * @param string $product_name Product name
 	 *
+	 * @return array Featured image.
 	 */
-	protected function get_image( $product ) {
+	protected function get_image( object $product, string $product_name ) {
 		$attachment_id = $product->get_image_id() ? $product->get_image_id() : 0;
 
 		// Set a placeholder image if the product has no images set.
 		if ( empty( $attachment_id ) ) {
 			return [
-				'id'   => 0,
-				'src'  => wc_placeholder_img_src(),
-				'name' => __( 'Placeholder', 'wc-next-app' ),
-				'alt'  => __( 'Placeholder', 'wc-next-app' ),
+				'attachmentId' => 0,
+				'src'          => wc_placeholder_img_src(),
+				'alt'          => $product_name,
 			];
 		}
 
-		$attachment = wp_get_attachment_image_src( get_post_thumbnail_id( $attachment_id ), 'full' );
+		$attachment = wp_get_attachment_image_src( $attachment_id, 'full' );
+		$altText    = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 
 		return [
-			'id'   => (int) $attachment_id,
-			'src'  => current( $attachment ),
-			'name' => get_the_title( $attachment_id ),
-			'alt'  => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
+			'attachmentId' => (int) $attachment_id,
+			'src'          => current( $attachment ),
+			'alt'          => ! empty( $altText ) ? $altText : $product_name,
 		];
 	}
 

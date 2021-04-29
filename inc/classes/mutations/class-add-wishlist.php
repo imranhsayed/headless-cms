@@ -34,7 +34,7 @@ class Add_Wishlist {
 		 * Action
 		 */
 
-		// Register Countries Field.
+		// Register Wishlist Mutation Types.
 		add_action( 'graphql_register_types', [ $this, 'add_wishlist_mutation' ] );
 
 	}
@@ -103,10 +103,13 @@ class Add_Wishlist {
 	/**
 	 * Save products to wishlist
 	 *
-	 * @param $product_id
-	 * @param $user_id
+	 * @param int $product_id Product id
+	 * @param int $user_id User Id.
+	 * @param array $response Response.
+	 *
+	 * @return array $response Response.
 	 */
-	public function save_products_to_wishlist( $product_id, $user_id, $response ) {
+	public function save_products_to_wishlist( int $product_id, int $user_id, array $response ) {
 		$current_user_id = get_current_user_id();
 
 		if ( $user_id !== $current_user_id ) {
@@ -138,7 +141,7 @@ class Add_Wishlist {
 		$save_product_to_user = update_user_meta( $user_id, 'wc_next_saved_products', $saved_products );
 
 		if ( is_wp_error( $save_product_to_user ) ) {
-			$response['error'] = __( 'Something went wrong', 'headless-cms' );
+			$response['error'] = __( 'Something went wrong in adding the product to wishlist', 'headless-cms' );
 
 			return $response;
 		}
