@@ -146,6 +146,57 @@ For Preview to work , you also need the [wp-graphql-jwt-authentication](https://
 }
 ```
 
+* Add Product to Wishlist Mutation ( Authenticated request )
+
+```javascript
+mutation ADD_ITEM {
+  addToWishlist(input: {clientMutationId: "example", productId: 340}) {
+    clientMutationId
+    error
+    added
+    productId
+  }
+}
+```
+
+* Remove Product from Wishlist Mutation( Authenticated request )
+
+```javascript
+mutation REMOVE_ITEM{
+  removeFromWishlist(input: {clientMutationId: "example", productId: 340}) {
+    error
+    productId
+    removed
+  }
+}
+```
+
+* Get Products from Wishlist Mutation ( Authenticated request )
+```javascript
+query GET_WISHLIST {
+  getWishList {
+    productIds
+    error
+    products {
+      productId
+      name
+      slug
+      buttonText
+      image {
+        alt
+        src
+        attachmentId
+      }
+      priceHtml
+      productUrl
+      stockQuantity
+      stockStatus
+      type
+    }
+  }
+}
+```
+
 * Schema Details
 
 ```javascript
