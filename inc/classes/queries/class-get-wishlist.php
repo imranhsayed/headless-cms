@@ -54,10 +54,10 @@ class Get_Wishlist {
 
 		register_graphql_object_type( 'WishlistProduct', [
 			'fields' => [
-				'productId'     => [ 'type' => 'Integer' ],
+				'databaseId'    => [ 'type' => 'Integer' ],
 				'name'          => [ 'type' => 'String' ],
 				'slug'          => [ 'type' => 'String' ],
-				'type'          => [ 'type' => 'String' ],
+				'__typename'    => [ 'type' => 'String' ],
 				'priceHtml'     => [ 'type' => 'String' ],
 				'image'         => [ 'type' => 'WishlistProductImage' ],
 				'buttonText'    => [ 'type' => 'String' ],
@@ -141,17 +141,20 @@ class Get_Wishlist {
 		}
 
 		foreach ( $products as $product ) {
-			$product_data                  = [];
-			$data                          = $product->get_data();
-			$product_data['productId']     = ! empty( $data['id'] ) ? $data['id'] : 0;
+			$product_data = [];
+			$data         = $product->get_data();
+			$stock_status = ! empty( $data['stock_status'] ) ? $data['stock_status'] : '';
+			$stock_status = 'instock' === $stock_status ? 'IN_STOCK' : $stock_status;
+
+			$product_data['databaseId']    = ! empty( $data['id'] ) ? $data['id'] : 0;
 			$product_data['name']          = ! empty( $data['name'] ) ? $data['name'] : '';
 			$product_data['slug']          = ! empty( $data['slug'] ) ? $data['slug'] : '';
-			$product_data['type']          = $product->get_type();
+			$product_data['__typename']    = $product->get_type();
 			$product_data['priceHtml']     = $product->get_price_html();
 			$product_data['image']         = $this->get_image( $product, $data['name'] );
 			$product_data['buttonText']    = ! empty( $data['button_text'] ) ? $data['button_text'] : '';
 			$product_data['productUrl']    = ! empty( $data['product_url'] ) ? $data['product_url'] : '';
-			$product_data['stockStatus']   = ! empty( $data['stock_status'] ) ? $data['stock_status'] : '';
+			$product_data['stockStatus']   = $stock_status;
 			$product_data['stockQuantity'] = intval( $data['stock_quantity'] );
 
 			// Push each product into the wishlist products array.
