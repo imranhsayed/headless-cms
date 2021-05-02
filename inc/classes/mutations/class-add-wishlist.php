@@ -52,82 +52,93 @@ class Add_Wishlist {
 	 *
 	 * @throws \Exception
 	 */
+	/**
+	 * Register field.
+	 */
 	public function add_wishlist_mutation() {
-		register_graphql_mutation( 'addToWishlist', [
-			'inputFields' => [
-				'productId' => [
-					'type'        => 'Integer',
-					'description' => __( 'Product id', 'headless-cms' ),
+		register_graphql_mutation(
+			'addToWishlist',
+			[
+				'inputFields'         => [
+					'productId' => [
+						'type'        => 'Integer',
+						'description' => __( 'Product id', 'headless-cms' ),
+					],
 				],
-			],
 
-			'outputFields' => [
-				'added'     => [
-					'type'        => 'Boolean',
-					'description' => __( 'True if the product is removed, false otherwise', 'headless-cms' ),
+				'outputFields'        => [
+					'added'              => [
+						'type'        => 'Boolean',
+						'description' => __( 'True if the product is removed, false otherwise', 'headless-cms' ),
+					],
+					'productId'          => [
+						'type'        => 'Integer',
+						'description' => __( 'The Product id that was added', 'headless-cms' ),
+					],
+					'wishlistProductIds' => [
+						'type'        => [ 'list_of' => 'String' ],
+						'description' => __( 'The Product ids in the wishlist', 'headless-cms' ),
+					],
+					'error'              => [
+						'type'        => 'String',
+						'description' => __( 'Description of the error', 'headless-cms' ),
+					],
 				],
-				'productId' => [
-					'type'        => 'Integer',
-					'description' => __( 'The Product id that was added', 'headless-cms' ),
-				],
-				'error'     => [
-					'type'        => 'String',
-					'description' => __( 'Description of the error', 'headless-cms' ),
-				],
-			],
 
-			'mutateAndGetPayload' => function ( $input, $context, $info ) {
+				'mutateAndGetPayload' => function ( $input, $context, $info ) {
 
-				$response = [
-					'added'     => false,
-					'productId' => ! empty( $input['productId'] ) ? $input['productId'] : 0,
-					'error'     => '',
-				];
+					$response = [
+						'added'              => false,
+						'productId'          => ! empty( $input['productId'] ) ? $input['productId'] : 0,
+						'wishlistProductIds' => [],
+						'error'              => '',
+					];
 
-				if ( empty( $input['productId'] ) ) {
-					$response['error'] = __( 'Please enter a valid product id', 'headless-cms' );
+					$user_id = get_current_user_id();
 
-					return $response;
-				}
+					if ( ! $user_id ) {
+						$response['error'] = __( 'Authentication failed', 'headless-cms' );
 
-				$user_id = get_current_user_id();
+						return $response;
+					}
 
-				if ( ! $user_id ) {
-					$response['error'] = __( 'Request is not authenticated', 'headless-cms' );
+					if ( empty( $input['productId'] ) ) {
+						$response['error'] = __( 'Please enter a valid product id', 'headless-cms' );
 
-					return $response;
-				}
+						return $response;
+					}
 
-				return $this->save_products_to_wishlist( $input['productId'], $user_id, $response );
-			},
-		] );
+					return $this->save_products_to_wishlist( $input['productId'], $user_id, $response );
+				},
+			]
+		);
 	}
-
 
 	/**
 	 * Save products to wishlist
 	 *
-	 * @param int $product_id Product id
+	 * @param int   $product_id Product id.
+	 * @param int   $user_id User id.
 	 * @param array $response Response.
-	 * @param int $user_id User id.
 	 *
 	 * @return array $response Response.
 	 */
 	public function save_products_to_wishlist( int $product_id, int $user_id, array $response ) {
 
-		// Check if the product id is valid else return error;
+		// Check if the product id is valid else return error.
 		$product = wc_get_product( $product_id );
 		if ( empty( $product ) ) {
 			$response['error'] = __( 'Product does not exist', 'headless-cms' );
 			return $response;
 		}
 
-		// Get saved products of current user
-		$saved_products = (array) get_user_meta( $user_id, 'wc_next_saved_products', true );
+		// Get saved products of current user.
+		$saved_products = (array) get_user_meta( $user_id, 'wishlist_saved_products', true );
+		$response['wishlistProductIds'] = array_filter( $saved_products );
 
 		// Check if the product already exists.
-		if ( in_array( $product_id, $saved_products ) ) {
-			if ( array_search( $product_id, $saved_products ) ) {
+		if ( in_array( $product_id, $saved_products, true ) ) {
+			if ( array_search( $product_id, $saved_products, true ) ) {
 				$response['error'] = __( 'Product already exist', 'headless-cms' );
 				return $response;
 			}
@@ -135,8 +146,8 @@ class Add_Wishlist {
 			$saved_products[] = $product_id;
 		}
 
-		// Save product to current user
-		$save_product_to_user = update_user_meta( $user_id, 'wc_next_saved_products', $saved_products );
+		// Save product to current user.
+		$save_product_to_user = update_user_meta( $user_id, 'wishlist_saved_products', $saved_products );
 
 		if ( is_wp_error( $save_product_to_user ) ) {
 			$response['error'] = __( 'Something went wrong in adding the product to wishlist', 'headless-cms' );
@@ -144,9 +155,11 @@ class Add_Wishlist {
 			return $response;
 		}
 
-		$response['added']     = true;
-		$response['productId'] = $product_id;
+		$saved_products = (array) get_user_meta( $user_id, 'wishlist_saved_products', true );
 
+		$response['added']              = true;
+		$response['productId']          = $product_id;
+		$response['wishlistProductIds'] = array_filter( $saved_products );
 		return $response;
 	}
 }
