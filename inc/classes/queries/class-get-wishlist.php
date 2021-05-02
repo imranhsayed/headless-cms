@@ -35,7 +35,9 @@ class Get_Wishlist {
 		 */
 
 		// Register Wishlist Field.
-		add_action( 'graphql_register_types', [ $this, 'register_get_wishlist_fields' ] );
+		if ( class_exists( 'WooCommerce' ) ) {
+			add_action( 'graphql_register_types', [ $this, 'register_get_wishlist_fields' ] );
+		}
 
 	}
 
@@ -57,7 +59,7 @@ class Get_Wishlist {
 				'databaseId'    => [ 'type' => 'Integer' ],
 				'name'          => [ 'type' => 'String' ],
 				'slug'          => [ 'type' => 'String' ],
-				'__typename'    => [ 'type' => 'String' ],
+				'typename'    => [ 'type' => 'String' ],
 				'priceHtml'     => [ 'type' => 'String' ],
 				'image'         => [ 'type' => 'WishlistProductImage' ],
 				'buttonText'    => [ 'type' => 'String' ],
@@ -90,11 +92,7 @@ class Get_Wishlist {
 					$wishlist_products = [
 						'productIds' => [],
 						'products'   => [],
-					];;
-
-					if ( ! class_exists( 'WooCommerce' ) ) {
-						return $wishlist_products;
-					}
+					];
 
 					$user_id = get_current_user_id();
 
@@ -104,7 +102,7 @@ class Get_Wishlist {
 						return $wishlist_products;
 					}
 
-					$saved_product_ids  = (array) get_user_meta( $user_id, 'wc_next_saved_products', true );
+					$saved_product_ids  = (array) get_user_meta( $user_id, 'wishlist_saved_products', true );
 					$wish_list_products = $this->prepare_wishlist_items_for_response( $saved_product_ids );
 
 					/**
@@ -130,6 +128,14 @@ class Get_Wishlist {
 	 * @return array $wishlist_products Wishlist products.
 	 */
 	public function prepare_wishlist_items_for_response( array $product_ids ) {
+
+		$type_list = [
+			'simple'   => 'SimpleProduct',
+			'variable' => 'VariableProduct',
+			'external' => 'ExternalProduct',
+			'group'    => 'GroupProduct',
+		];
+
 		$wishlist_products = [];
 		$args              = [
 			'include' => $product_ids,
@@ -145,11 +151,13 @@ class Get_Wishlist {
 			$data         = $product->get_data();
 			$stock_status = ! empty( $data['stock_status'] ) ? $data['stock_status'] : '';
 			$stock_status = 'instock' === $stock_status ? 'IN_STOCK' : $stock_status;
+			$typename = $product->get_type();
+			$typename = ! empty( $typename ) ? $type_list[$typename] : '';
 
 			$product_data['databaseId']    = ! empty( $data['id'] ) ? $data['id'] : 0;
 			$product_data['name']          = ! empty( $data['name'] ) ? $data['name'] : '';
 			$product_data['slug']          = ! empty( $data['slug'] ) ? $data['slug'] : '';
-			$product_data['__typename']    = $product->get_type();
+			$product_data['typename']      = $typename;
 			$product_data['priceHtml']     = $product->get_price_html();
 			$product_data['image']         = $this->get_image( $product, $data['name'] );
 			$product_data['buttonText']    = ! empty( $data['button_text'] ) ? $data['button_text'] : '';

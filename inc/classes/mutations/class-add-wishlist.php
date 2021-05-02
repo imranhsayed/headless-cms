@@ -67,11 +67,11 @@ class Add_Wishlist {
 				],
 
 				'outputFields'        => [
-					'added'     => [
+					'added'              => [
 						'type'        => 'Boolean',
 						'description' => __( 'True if the product is removed, false otherwise', 'headless-cms' ),
 					],
-					'productId' => [
+					'productId'          => [
 						'type'        => 'Integer',
 						'description' => __( 'The Product id that was added', 'headless-cms' ),
 					],
@@ -79,7 +79,7 @@ class Add_Wishlist {
 						'type'        => [ 'list_of' => 'String' ],
 						'description' => __( 'The Product ids in the wishlist', 'headless-cms' ),
 					],
-					'error'     => [
+					'error'              => [
 						'type'        => 'String',
 						'description' => __( 'Description of the error', 'headless-cms' ),
 					],
@@ -94,8 +94,11 @@ class Add_Wishlist {
 						'error'              => '',
 					];
 
-					if ( ! get_current_user_id() ) {
+					$user_id = get_current_user_id();
+
+					if ( ! $user_id ) {
 						$response['error'] = __( 'Authentication failed', 'headless-cms' );
+
 						return $response;
 					}
 
@@ -105,7 +108,7 @@ class Add_Wishlist {
 						return $response;
 					}
 
-					return $this->save_products_to_wishlist( $input['productId'], $response );
+					return $this->save_products_to_wishlist( $input['productId'], $user_id, $response );
 				},
 			]
 		);
@@ -115,12 +118,12 @@ class Add_Wishlist {
 	 * Save products to wishlist
 	 *
 	 * @param int   $product_id Product id.
+	 * @param int   $user_id User id.
 	 * @param array $response Response.
 	 *
 	 * @return array $response Response.
 	 */
-	public function save_products_to_wishlist( int $product_id, array $response ) {
-		$user_id = get_current_user_id();
+	public function save_products_to_wishlist( int $product_id, int $user_id, array $response ) {
 
 		// Check if the product id is valid else return error.
 		$product = wc_get_product( $product_id );
@@ -130,7 +133,7 @@ class Add_Wishlist {
 		}
 
 		// Get saved products of current user.
-		$saved_products = (array) get_user_meta( $user_id, 'waldos_saved_products', true );
+		$saved_products = (array) get_user_meta( $user_id, 'wishlist_saved_products', true );
 		$response['wishlistProductIds'] = array_filter( $saved_products );
 
 		// Check if the product already exists.
@@ -144,7 +147,7 @@ class Add_Wishlist {
 		}
 
 		// Save product to current user.
-		$save_product_to_user = update_user_meta( $user_id, 'waldos_saved_products', $saved_products );
+		$save_product_to_user = update_user_meta( $user_id, 'wishlist_saved_products', $saved_products );
 
 		if ( is_wp_error( $save_product_to_user ) ) {
 			$response['error'] = __( 'Something went wrong in adding the product to wishlist', 'headless-cms' );
@@ -152,7 +155,7 @@ class Add_Wishlist {
 			return $response;
 		}
 
-		$saved_products = (array) get_user_meta( $user_id, 'waldos_saved_products', true );
+		$saved_products = (array) get_user_meta( $user_id, 'wishlist_saved_products', true );
 
 		$response['added']              = true;
 		$response['productId']          = $product_id;
