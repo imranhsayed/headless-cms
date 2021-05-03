@@ -71,7 +71,7 @@ class Delete_Wishlist {
 					'description' => __( 'The Product id that was deleted', 'headless-cms' ),
 				],
 				'wishlistProductIds' => [
-					'type'        => [ 'list_of' => 'String' ],
+					'type'        => [ 'list_of' => 'Integer' ],
 					'description' => __( 'The Product ids in the wishlist', 'headless-cms' ),
 				],
 				'error'     => [
@@ -126,9 +126,8 @@ class Delete_Wishlist {
 
 		unset( $saved_products[ $key ] );
 		$removed_product_from_wishlist = update_user_meta( $user_id, 'wishlist_saved_products', $saved_products );
-		$saved_products                = (array) get_user_meta( $user_id, 'wishlist_saved_products', true );
 
-		if ( is_wp_error( $removed_product_from_wishlist ) ) {
+		if ( !$removed_product_from_wishlist ) {
 			$response['error'] = __( 'Something went wrong in removing the product', 'headless-cms' );
 
 			return $response;

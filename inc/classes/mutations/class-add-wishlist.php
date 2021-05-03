@@ -76,7 +76,7 @@ class Add_Wishlist {
 						'description' => __( 'The Product id that was added', 'headless-cms' ),
 					],
 					'wishlistProductIds' => [
-						'type'        => [ 'list_of' => 'String' ],
+						'type'        => [ 'list_of' => 'Integer' ],
 						'description' => __( 'The Product ids in the wishlist', 'headless-cms' ),
 					],
 					'error'              => [
@@ -149,13 +149,11 @@ class Add_Wishlist {
 		// Save product to current user.
 		$save_product_to_user = update_user_meta( $user_id, 'wishlist_saved_products', $saved_products );
 
-		if ( is_wp_error( $save_product_to_user ) ) {
+		if ( !$save_product_to_user ) {
 			$response['error'] = __( 'Something went wrong in adding the product to wishlist', 'headless-cms' );
 
 			return $response;
 		}
-
-		$saved_products = (array) get_user_meta( $user_id, 'wishlist_saved_products', true );
 
 		$response['added']              = true;
 		$response['productId']          = $product_id;

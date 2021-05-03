@@ -155,6 +155,7 @@ mutation ADD_ITEM {
     error
     added
     productId
+    wishlistProductIds
   }
 }
 ```
@@ -167,6 +168,7 @@ mutation REMOVE_ITEM{
     error
     productId
     removed
+    wishlistProductIds
   }
 }
 ```
@@ -178,7 +180,7 @@ query GET_WISHLIST {
     productIds
     error
     products {
-      productId
+      databaseId
       name
       slug
       buttonText
@@ -191,7 +193,7 @@ query GET_WISHLIST {
       productUrl
       stockQuantity
       stockStatus
-      type
+      typename
     }
   }
 }
