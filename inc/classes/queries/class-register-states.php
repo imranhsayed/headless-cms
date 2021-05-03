@@ -5,7 +5,7 @@
  * @package headless-cms
  */
 
-namespace Headless_CMS\Features\Inc\Schema;
+namespace Headless_CMS\Features\Inc\Queries;
 
 use Headless_CMS\Features\Inc\Traits\Singleton;
 

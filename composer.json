@@ -3,7 +3,7 @@
   "description": "A WordPress plugin that adds features to use WordPress as a headless CMS with any front-end environment using REST API",
   "type": "wordpress-plugin",
   "license": "GPL-3.0+",
-  "version": "1.7.0",
+  "version": "1.9.0",
   "keywords": [
 	"wordpress",
 	"plugin"
