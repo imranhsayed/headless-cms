@@ -57,6 +57,7 @@ function autoloader( $resource = '' ) {
 			case 'blocks':
 			case 'meta-boxes':
 			case 'widgets':
+			case 'mutations':
 			case 'schema':
 			case 'api':
 			case 'plugin-configs': // phpcs:ignore PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
