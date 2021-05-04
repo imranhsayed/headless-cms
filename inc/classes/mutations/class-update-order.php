@@ -56,12 +56,12 @@ class Update_Order {
 		register_graphql_mutation( 'updateTheOrder', [
 			'inputFields' => [
 				'orderId' => [
-					'type'        => 'Integer',
+					'type'        => 'String',
 					'description' => __( 'Order id', 'headless-cms' ),
 				],
 				'newOrderStatus' => [
 					'type'        => 'String',
-					'description' => __( 'New order Status', 'headless-cms' ),
+					'description' => __( 'New order Status - "completed", "cancelled", "pending" ', 'headless-cms' ),
 				],
 				'transactionId' => [
 					'type'        => 'String',
@@ -75,7 +75,7 @@ class Update_Order {
 					'description' => __( 'Has order status updated', 'headless-cms' ),
 				],
 				'orderId' => [
-					'type'        => 'Integer',
+					'type'        => 'String',
 					'description' => __( 'Order Id in question', 'headless-cms' ),
 				],
 				'orderStatus' => [
@@ -126,8 +126,8 @@ class Update_Order {
 					return $response;
 				}
 
-				$order                          = new \WC_Order( $input['orderId'] );
-				$response['orderStatusUpdated'] = ! empty( $input['newOrderStatus'] ) ? $order->update_status( $input['newOrderStatus'], 'order_note' ) : false;
+				$order                          = wc_get_order( "216" );
+				$response['orderStatusUpdated'] = ! empty( $input['newOrderStatus'] ) ? $order->update_status( $input['newOrderStatus'] ) : false;
 				$response['orderStatus']        = $order->get_status();
 				$response['orderNumber']        = $order->get_order_number();
 				$response['customerId']         = $order->get_customer_id();
@@ -136,6 +136,8 @@ class Update_Order {
 					$order->set_transaction_id( $input['transactionId'] );
 				}
 				$response['transactionId'] = $order->get_transaction_id();
+
+				$response['error'] = wp_json_encode( $order );
 
 				return $response;
 			},
