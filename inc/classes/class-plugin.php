@@ -14,6 +14,7 @@ use Headless_CMS\Features\Inc\Api\Home_Page;
 use Headless_CMS\Features\Inc\Api\Post_By_Tax;
 use Headless_CMS\Features\Inc\Mutations\Add_Wishlist;
 use Headless_CMS\Features\Inc\Mutations\Delete_Wishlist;
+use Headless_CMS\Features\Inc\Mutations\Update_Order;
 use Headless_CMS\Features\Inc\Queries\Get_Wishlist;
 use Headless_CMS\Features\Inc\Queries\Header_Footer_Schema;
 use Headless_CMS\Features\Inc\Queries\Post_Schema;
@@ -62,6 +63,7 @@ class Plugin {
 		// Mutations
 		Add_Wishlist::get_instance();
 		Delete_Wishlist::get_instance();
+		Update_Order::get_instance();
 
 		// Preview.
 		Preview::get_instance();
