@@ -59,9 +59,9 @@ class Update_Order {
 					'type'        => 'String',
 					'description' => __( 'Order id', 'headless-cms' ),
 				],
-				'newOrderStatus' => [
-					'type'        => 'String',
-					'description' => __( 'New order Status - "completed", "cancelled", "pending" ', 'headless-cms' ),
+				'status' => [
+					'type'        => 'OrderStatusEnum',
+					'description' => __( 'New order Status ', 'headless-cms' ),
 				],
 				'transactionId' => [
 					'type'        => 'String',
@@ -81,10 +81,6 @@ class Update_Order {
 				'orderStatus' => [
 					'type'        => 'String',
 					'description' => __( 'Updated Order Status', 'headless-cms' ),
-				],
-				'orderNumber' => [
-					'type'        => 'String',
-					'description' => __( 'Order Number', 'headless-cms' ),
 				],
 				'customerId' => [
 					'type'        => 'Integer',
@@ -106,7 +102,6 @@ class Update_Order {
 					'orderStatusUpdated' => false,
 					'orderId' => ! empty( $input['orderId'] ) ? intval($input['orderId']) : 0,
 					'orderStatus' => '',
-					'orderNumber' => '',
 					'customerId'   => 0,
 					'transactionId' => '',
 					'error'     => '',
@@ -126,10 +121,9 @@ class Update_Order {
 					return $response;
 				}
 
-				$order                          = wc_get_order( "216" );
-				$response['orderStatusUpdated'] = ! empty( $input['newOrderStatus'] ) ? $order->update_status( $input['newOrderStatus'] ) : false;
+				$order                          = \WC_Order_Factory::get_order( $input['orderId'] );
+				$response['orderStatusUpdated'] = ! empty( $input['status'] ) && $order->update_status( $input['status'] );
 				$response['orderStatus']        = $order->get_status();
-				$response['orderNumber']        = $order->get_order_number();
 				$response['customerId']         = $order->get_customer_id();
 
 				if ( ! empty( $input['transactionId'] ) ) {
