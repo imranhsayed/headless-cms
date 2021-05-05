@@ -55,11 +55,11 @@ class Update_Order {
 	public function update_order_mutation() {
 		register_graphql_mutation( 'updateTheOrder', [
 			'inputFields' => [
-				'orderId' => [
+				'orderId'       => [
 					'type'        => 'String',
 					'description' => __( 'Order id', 'headless-cms' ),
 				],
-				'status' => [
+				'status'        => [
 					'type'        => 'OrderStatusEnum',
 					'description' => __( 'New order Status ', 'headless-cms' ),
 				],
@@ -74,23 +74,23 @@ class Update_Order {
 					'type'        => 'Integer',
 					'description' => __( 'Has order status updated', 'headless-cms' ),
 				],
-				'orderId' => [
+				'orderId'            => [
 					'type'        => 'String',
 					'description' => __( 'Order Id in question', 'headless-cms' ),
 				],
-				'orderStatus' => [
+				'orderStatus'        => [
 					'type'        => 'String',
 					'description' => __( 'Updated Order Status', 'headless-cms' ),
 				],
-				'customerId' => [
+				'customerId'         => [
 					'type'        => 'Integer',
 					'description' => __( 'Customer Id', 'headless-cms' ),
 				],
-				'transactionId' => [
+				'transactionId'      => [
 					'type'        => 'String',
 					'description' => __( 'Transaction id', 'headless-cms' ),
 				],
-				'error'     => [
+				'error'              => [
 					'type'        => 'String',
 					'description' => __( 'Description of the error', 'headless-cms' ),
 				],
@@ -100,11 +100,11 @@ class Update_Order {
 
 				$response = [
 					'orderStatusUpdated' => false,
-					'orderId' => ! empty( $input['orderId'] ) ? intval($input['orderId']) : 0,
-					'orderStatus' => '',
-					'customerId'   => 0,
-					'transactionId' => '',
-					'error'     => '',
+					'orderId'            => ! empty( $input['orderId'] ) ? intval( $input['orderId'] ) : 0,
+					'orderStatus'        => '',
+					'customerId'         => 0,
+					'transactionId'      => '',
+					'error'              => '',
 				];
 
 				if ( empty( $input['orderId'] ) ) {
