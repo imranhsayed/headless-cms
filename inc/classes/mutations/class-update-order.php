@@ -34,7 +34,7 @@ class Update_Order {
 		 * Action
 		 */
 
-		// Register Delete wishlist Mutation Types.
+		// Register update order Mutation Types.
 		add_action( 'graphql_register_types', [ $this, 'update_order_mutation' ] );
 
 	}
@@ -121,20 +121,36 @@ class Update_Order {
 					return $response;
 				}
 
-				$order                          = \WC_Order_Factory::get_order( $input['orderId'] );
-				$response['orderStatusUpdated'] = ! empty( $input['status'] ) && $order->update_status( $input['status'] );
-				$response['orderStatus']        = $order->get_status();
-				$response['customerId']         = $order->get_customer_id();
-
-				if ( ! empty( $input['transactionId'] ) ) {
-					$order->set_transaction_id( $input['transactionId'] );
-				}
-				$response['transactionId'] = $order->get_transaction_id();
-
-				$response['error'] = wp_json_encode( $order );
-
-				return $response;
+				return $this->update_order_details( $input['orderId'], $input['status'], $input['transactionId'], $response );
 			},
 		] );
+	}
+
+	/**
+	 * Update order details
+	 *
+	 * @param string $input_order_id       Input Order id.
+	 * @param string $input_status         Input status. e.g. COMPLETE, PENDING etc (dropdown selection)..
+	 * @param string $input_transaction_id Input transaction id.
+	 * @param array  $response             Response.
+	 *
+	 * @return array Response.
+	 *
+	 * @throws \WC_Data_Exception
+	 */
+	public function update_order_details( string $input_order_id, string $input_status, string $input_transaction_id, array $response ) {
+
+		$order                          = \WC_Order_Factory::get_order( $input_order_id );
+		$response['orderStatusUpdated'] = ! empty( $input_status ) && $order->update_status( $input_status );
+		$response['orderStatus']        = $order->get_status();
+		$response['customerId']         = $order->get_customer_id();
+
+		if ( ! empty( $input_transaction_id ) ) {
+			$order->set_transaction_id( $input_transaction_id );
+		}
+
+		$response['transactionId'] = $order->get_transaction_id();
+
+		return $response;
 	}
 }
