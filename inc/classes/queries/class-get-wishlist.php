@@ -35,9 +35,7 @@ class Get_Wishlist {
 		 */
 
 		// Register Wishlist Field.
-		if ( class_exists( 'WooCommerce' ) ) {
-			add_action( 'graphql_register_types', [ $this, 'register_get_wishlist_fields' ] );
-		}
+		add_action( 'graphql_register_types', [ $this, 'register_get_wishlist_fields' ] );
 
 	}
 
@@ -45,6 +43,10 @@ class Get_Wishlist {
 	 * Register field.
 	 */
 	function register_get_wishlist_fields() {
+
+		if ( !class_exists('WooCommerce') ) {
+			return;
+		}
 
 		register_graphql_object_type( 'WishlistProductImage', [
 			'fields' => [
