@@ -17,6 +17,7 @@ use Headless_CMS\Features\Inc\Mutations\Delete_Wishlist;
 use Headless_CMS\Features\Inc\Queries\Get_Wishlist;
 use Headless_CMS\Features\Inc\Queries\Header_Footer_Schema;
 use Headless_CMS\Features\Inc\Queries\Post_Schema;
+use Headless_CMS\Features\Inc\Queries\Product;
 use Headless_CMS\Features\Inc\Queries\Register_Countries;
 use Headless_CMS\Features\Inc\Queries\Register_Shipping;
 use Headless_CMS\Features\Inc\Queries\Register_States;
@@ -58,6 +59,7 @@ class Plugin {
 		Register_States::get_instance();
 		Register_Shipping::get_instance();
 		Get_Wishlist::get_instance();
+		Product::get_instance();
 
 		// Mutations
 		Add_Wishlist::get_instance();
