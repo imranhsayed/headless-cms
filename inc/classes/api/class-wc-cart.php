@@ -8,10 +8,10 @@
 namespace Headless_CMS\Features\Inc\Api;
 
 use Headless_CMS\Features\Inc\Traits\Singleton;
-use WP_Error;
-use WP_REST_Request;
-use WP_REST_Response;
-use WP_REST_Server;
+use \WP_Error;
+use \WP_REST_Request;
+use \WP_REST_Response;
+use \WP_REST_Server;
 
 /**
  * Class Header_Footer_Api
@@ -38,11 +38,17 @@ class Wc_Cart {
 	 * Construct method.
 	 */
 	protected function __construct() {
-		if ( ! class_exists( 'WooCommerce' ) ) {
-			return false;
-		}
 
 		$this->setup_hooks();
+	}
+
+	public function customize_rest_cors() {
+		remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
+		add_filter( 'rest_pre_serve_request', function ( $value ) {
+			header( 'Access-Control-Allow-Origin: http://localhost:3000' );
+			header( 'Access-Control-Allow-Headers: X-WC-Session, X-Headless-CMS, Content-Type, Authorization' );
+			header( 'Access-Control-Expose-Headers: X-WC-Session, X-Headless-CMS, X-WC-Cart-Totals, X-WC-Cart-TotalItems, X-WP-Total, X-WP-TotalPages', false );
+		} );
 	}
 
 	/**
@@ -55,6 +61,7 @@ class Wc_Cart {
 		/**
 		 * Action
 		 */
+		add_action( 'init', [ $this, 'customize_rest_cors' ] );
 		add_action( 'rest_api_init', [ $this, 'rest_posts_endpoints' ] );
 		add_filter( 'rest_pre_dispatch', [ $this, 'check_rest_response' ], 10, 3 );
 
@@ -63,9 +70,9 @@ class Wc_Cart {
 	/**
 	 * Dispath rest response
 	 *
+	 * @return mixed
 	 * @since 1.0.0
 	 *
-	 * @return mixed
 	 */
 	public function check_rest_response( $response, $object, $request ) {
 		if ( $this->wc_next_validate_boolean( $request->get_header( 'X-Headless-CMS' ) ) ) {
@@ -88,11 +95,11 @@ class Wc_Cart {
 	/**
 	 * Validate a boolean variable
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param mixed $var
 	 *
 	 * @return bool
+	 * @since 1.0.0
+	 *
 	 */
 	public function wc_next_validate_boolean( $var ) {
 		return filter_var( $var, FILTER_VALIDATE_BOOLEAN );
@@ -107,157 +114,157 @@ class Wc_Cart {
 		register_rest_route(
 			$this->namespace,
 			'/' . $this->rest_base,
-			array(
-				array(
+			[
+				[
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_items' ),
+					'callback'            => [ $this, 'get_items' ],
 					'permission_callback' => '__return_true',
-				),
+				],
 
-				array(
+				[
 					'methods'             => WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'create_item' ),
+					'callback'            => [ $this, 'create_item' ],
 					'permission_callback' => '__return_true',
 					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
-				),
+				],
 
-				array(
+				[
 					'methods'             => WP_REST_Server::DELETABLE,
-					'callback'            => array( $this, 'clear_cart' ),
+					'callback'            => [ $this, 'clear_cart' ],
 					'permission_callback' => '__return_true',
-				),
+				],
 
-				'schema' => array( $this, 'get_public_item_schema' ),
-			)
+				'schema' => [ $this, 'get_public_item_schema' ],
+			]
 		);
 
 		register_rest_route(
 			$this->namespace,
 			'/' . $this->rest_base . '/batch',
-			array(
-				array(
+			[
+				[
 					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'batch_items' ),
+					'callback'            => [ $this, 'batch_items' ],
 					'permission_callback' => '__return_true',
 					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
-				),
-				'schema' => array( $this, 'get_public_batch_schema' ),
-			)
+				],
+				'schema' => [ $this, 'get_public_batch_schema' ],
+			]
 		);
 
 		register_rest_route(
 			$this->namespace,
 			'/' . $this->rest_base . '/(?P<key>[\w-]+)',
-			array(
-				'args' => array(
-					'key' => array(
-						'description'       => __( 'The cart item key is what identifies the item in the cart.', 'wc-next-app' ),
+			[
+				'args' => [
+					'key' => [
+						'description'       => __( 'The cart item key is what identifies the item in the cart.', 'headless-cms' ),
 						'type'              => 'string',
-						'validate_callback' => array( $this, 'is_valid_cart_item' ),
-					),
-				),
+						'validate_callback' => [ $this, 'is_valid_cart_item' ],
+					],
+				],
 
-				array(
+				[
 					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_item' ),
+					'callback'            => [ $this, 'update_item' ],
 					'permission_callback' => '__return_true',
-					'args'                => array(
+					'args'                => [
 						'quantity' => $item_schema['properties']['quantity'],
-					),
-				),
+					],
+				],
 
-				array(
+				[
 					'methods'             => WP_REST_Server::DELETABLE,
-					'callback'            => array( $this, 'delete_item' ),
+					'callback'            => [ $this, 'delete_item' ],
 					'permission_callback' => '__return_true',
-				),
+				],
 
-				'schema' => array( $this, 'get_public_item_schema' ),
-			)
+				'schema' => [ $this, 'get_public_item_schema' ],
+			]
 		);
 
 		register_rest_route(
 			$this->namespace,
 			'/' . $this->rest_base . '/(?P<key>[\w-]+)/restore',
-			array(
-				'args' => array(
-					'key' => array(
-						'description'       => __( 'The cart item key is what identifies the item in the cart.', 'wc-next-app' ),
+			[
+				'args' => [
+					'key' => [
+						'description'       => __( 'The cart item key is what identifies the item in the cart.', 'headless-cms' ),
 						'type'              => 'string',
-						'validate_callback' => array( $this, 'is_valid_removed_cart_item' ),
-					),
-				),
+						'validate_callback' => [ $this, 'is_valid_removed_cart_item' ],
+					],
+				],
 
-				array(
+				[
 					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'restore_item' ),
+					'callback'            => [ $this, 'restore_item' ],
 					'permission_callback' => '__return_true',
-				),
-			)
+				],
+			]
 		);
 	}
 
 	/**
 	 * Get the Cart schema, conforming to JSON Schema.
 	 *
+	 * @return array
 	 * @since 1.0.0
 	 *
-	 * @return array
 	 */
 	public function get_default_item_schema() {
 		// @todo: Add more properties matches the /cart GET endpoint
-		$schema = array(
+		$schema = [
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
 			'title'      => 'cart',
 			'type'       => 'object',
-			'properties' => array(
-				'key' => array(
-					'description' => __( 'Cart item key.', 'wc-next-app' ),
+			'properties' => [
+				'key'            => [
+					'description' => __( 'Cart item key.', 'headless-cms' ),
 					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
+					'context'     => [ 'view', 'edit' ],
 					'readonly'    => true,
-				),
-				'product_id' => array(
-					'description' => __( 'ID of the product to add to the cart.', 'wc-next-app' ),
+				],
+				'product_id'     => [
+					'description' => __( 'ID of the product to add to the cart.', 'headless-cms' ),
 					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
+					'context'     => [ 'view', 'edit' ],
 					'default'     => 0,
-					'arg_options' => array(
-						'validate_callback' => array( $this, 'is_valid_product' ),
-					),
-				),
-				'quantity' => array(
-					'description' => __( 'Quantity of the item to add.', 'wc-next-app' ),
+					'arg_options' => [
+						'validate_callback' => [ $this, 'is_valid_product' ],
+					],
+				],
+				'quantity'       => [
+					'description' => __( 'Quantity of the item to add.', 'headless-cms' ),
 					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
+					'context'     => [ 'view', 'edit' ],
 					'default'     => 1,
-					'arg_options' => array(
-						'validate_callback' => array( $this, 'is_valid_quantity' ),
-					),
-				),
-				'variation_id' => array(
-					'description' => __( 'ID of the variation being added to the cart.', 'wc-next-app' ),
+					'arg_options' => [
+						'validate_callback' => [ $this, 'is_valid_quantity' ],
+					],
+				],
+				'variation_id'   => [
+					'description' => __( 'ID of the variation being added to the cart.', 'headless-cms' ),
 					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
+					'context'     => [ 'view', 'edit' ],
 					'default'     => 0,
-					'arg_options' => array(
-						'validate_callback' => array( $this, 'is_valid_product' ),
-					),
-				),
-				'variation' => array(
-					'description' => __( 'Variation attribute values.', 'wc-next-app' ),
+					'arg_options' => [
+						'validate_callback' => [ $this, 'is_valid_product' ],
+					],
+				],
+				'variation'      => [
+					'description' => __( 'Variation attribute values.', 'headless-cms' ),
 					'type'        => 'object',
-					'context'     => array( 'view', 'edit' ),
-					'default'     => array(),
-				),
-				'cart_item_data' => array(
-					'description' => __( 'Extra cart item data we want to pass into the item.', 'wc-next-app' ),
+					'context'     => [ 'view', 'edit' ],
+					'default'     => [],
+				],
+				'cart_item_data' => [
+					'description' => __( 'Extra cart item data we want to pass into the item.', 'headless-cms' ),
 					'type'        => 'object',
-					'context'     => array( 'view', 'edit' ),
-					'default'     => array(),
-				),
-			),
-		);
+					'context'     => [ 'view', 'edit' ],
+					'default'     => [],
+				],
+			],
+		];
 
 		return $this->add_additional_fields_schema( $schema );
 	}
@@ -265,9 +272,9 @@ class Wc_Cart {
 	/**
 	 * Retrieves the item's schema for display / public consumption purposes.
 	 *
+	 * @return array Public item schema data.
 	 * @since 4.7.0
 	 *
-	 * @return array Public item schema data.
 	 */
 	public function get_public_item_schema() {
 
@@ -285,14 +292,14 @@ class Wc_Cart {
 	/**
 	 * Get cart items
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param \WP_REST_Request $request
 	 *
 	 * @return \WP_REST_Response
+	 * @since 1.0.0
+	 *
 	 */
 	public function get_items( $request ) {
-		$data = array();
+		$data = [];
 		include_once WC_ABSPATH . 'includes/wc-cart-functions.php';
 		include_once WC_ABSPATH . 'includes/class-wc-cart.php';
 
@@ -314,12 +321,13 @@ class Wc_Cart {
 	/**
 	 * Retrieves an array of endpoint arguments from the item schema for the controller.
 	 *
-	 * @since 4.7.0
-	 *
 	 * @param string $method Optional. HTTP method of the request. The arguments for `CREATABLE` requests are
 	 *                       checked for required values and may fall-back to a given default, this is not done
 	 *                       on `EDITABLE` requests. Default WP_REST_Server::CREATABLE.
+	 *
 	 * @return array Endpoint arguments.
+	 * @since 4.7.0
+	 *
 	 */
 	public function get_endpoint_args_for_item_schema( $method = WP_REST_Server::CREATABLE ) {
 		return rest_get_endpoint_args_for_schema( $this->get_item_schema(), $method );
@@ -328,12 +336,12 @@ class Wc_Cart {
 	/**
 	 * Retrieves the item's schema, conforming to JSON Schema.
 	 *
+	 * @return array Item schema data.
 	 * @since 4.7.0
 	 *
-	 * @return array Item schema data.
 	 */
 	public function get_item_schema() {
-		return $this->add_additional_fields_schema( array() );
+		return $this->add_additional_fields_schema( [] );
 	}
 
 	/**
@@ -341,10 +349,11 @@ class Wc_Cart {
 	 *
 	 * The type of object is inferred from the passed schema.
 	 *
+	 * @param array $schema Schema array.
+	 *
+	 * @return array Modified Schema array.
 	 * @since 4.7.0
 	 *
-	 * @param array $schema Schema array.
-	 * @return array Modified Schema array.
 	 */
 	protected function add_additional_fields_schema( $schema ) {
 		if ( empty( $schema['title'] ) ) {
@@ -370,11 +379,12 @@ class Wc_Cart {
 	/**
 	 * Retrieves all of the registered additional fields for a given object-type.
 	 *
-	 * @since 4.7.0
-	 *
 	 * @param string $object_type Optional. The object type.
+	 *
 	 * @return array Registered additional fields (if any), empty array if none or if the object type could
 	 *               not be inferred.
+	 * @since 4.7.0
+	 *
 	 */
 	protected function get_additional_fields( $object_type = null ) {
 
@@ -383,13 +393,13 @@ class Wc_Cart {
 		}
 
 		if ( ! $object_type ) {
-			return array();
+			return [];
 		}
 
 		global $wp_rest_additional_fields;
 
 		if ( ! $wp_rest_additional_fields || ! isset( $wp_rest_additional_fields[ $object_type ] ) ) {
-			return array();
+			return [];
 		}
 
 		return $wp_rest_additional_fields[ $object_type ];
@@ -398,9 +408,9 @@ class Wc_Cart {
 	/**
 	 * Load WC Cart functionalities in REST environment
 	 *
+	 * @return void
 	 * @since 1.0.0
 	 *
-	 * @return void
 	 */
 	public function wc_load_cart() {
 		include_once WC_ABSPATH . 'includes/wc-notice-functions.php';
@@ -415,21 +425,21 @@ class Wc_Cart {
 	/**
 	 * Add item to cart
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param \WP_REST_Request $request
 	 *
 	 * @return \WP_REST_Response
+	 * @since 1.0.0
+	 *
 	 */
 	public function create_item( $request ) {
-		$product_id     = $request['product_id'];
-		$quantity       = ! empty( $request['quantity'] ) ? $request['quantity'] : 1;
-		$variation_id   = ! empty( $request['variation_id'] ) ? $request['variation_id'] : 0;
+		$product_id   = $request['product_id'];
+		$quantity     = ! empty( $request['quantity'] ) ? $request['quantity'] : 1;
+		$variation_id = ! empty( $request['variation_id'] ) ? $request['variation_id'] : 0;
 
 		$product = wc_get_product( $variation_id ? $variation_id : $product_id );
 
 		if ( empty( $product ) ) {
-			return new WP_Error( 'rest_invalid_product', __( 'Product not exists', 'wc-next-app' ) );
+			return new WP_Error( 'rest_invalid_product', __( 'Product not exists', 'headless-cms' ) );
 		}
 
 		if ( $product instanceof WC_Product_Variation ) {
@@ -447,21 +457,21 @@ class Wc_Cart {
 
 			if ( $found_in_cart ) {
 				/* translators: %s: product name */
-				return new WP_Error( 'wc_next_rest_product_sold_individually', sprintf( __( 'You cannot add another "%s" to your cart.', 'wc-next-app' ), $product->get_name() ), array( 'status' => 500 ) );
+				return new WP_Error( 'wc_next_rest_product_sold_individually', sprintf( __( 'You cannot add another "%s" to your cart.', 'headless-cms' ), $product->get_name() ), [ 'status' => 500 ] );
 			}
 		}
 
 		// Product is purchasable check.
 		if ( ! $product->is_purchasable() ) {
-			return new WP_Error( 'wc_next_rest_cannot_be_purchased', __( 'Sorry, this product cannot be purchased.', 'wc-next-app' ), array( 'status' => 500 ) );
+			return new WP_Error( 'wc_next_rest_cannot_be_purchased', __( 'Sorry, this product cannot be purchased.', 'headless-cms' ), [ 'status' => 500 ] );
 		}
 
 		// Stock check - only check if we're managing stock and backorders are not allowed.
 		if ( ! $product->is_in_stock() ) {
-			return new WP_Error( 'wc_next_rest_product_out_of_stock', sprintf( __( 'You cannot add &quot;%s&quot; to the cart because the product is out of stock.', 'wc-next-app' ), $product->get_name() ), array( 'status' => 500 ) );
+			return new WP_Error( 'wc_next_rest_product_out_of_stock', sprintf( __( 'You cannot add &quot;%s&quot; to the cart because the product is out of stock.', 'headless-cms' ), $product->get_name() ), [ 'status' => 500 ] );
 		}
 		if ( ! $product->has_enough_stock( $quantity ) ) {
-			return new WP_Error( 'wc_next_rest_not_enough_in_stock', sprintf( __( 'You cannot add that amount of &quot;%1$s&quot; to the cart because there is not enough stock (%2$s remaining).', 'wc-next-app' ), $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity(), $product ) ), array( 'status' => 500 ) );
+			return new WP_Error( 'wc_next_rest_not_enough_in_stock', sprintf( __( 'You cannot add that amount of &quot;%1$s&quot; to the cart because there is not enough stock (%2$s remaining).', 'headless-cms' ), $product->get_name(), wc_format_stock_quantity_for_display( $product->get_stock_quantity(), $product ) ), [ 'status' => 500 ] );
 		}
 
 		// Stock check - this time accounting for whats already in-cart.
@@ -472,11 +482,11 @@ class Wc_Cart {
 				return new WP_Error(
 					'wc_next_rest_not_enough_stock_remaining',
 					sprintf(
-						__( 'You cannot add that amount to the cart &mdash; we have %1$s in stock and you already have %2$s in your cart.', 'wc-next-app' ),
+						__( 'You cannot add that amount to the cart &mdash; we have %1$s in stock and you already have %2$s in your cart.', 'headless-cms' ),
 						wc_format_stock_quantity_for_display( $product->get_stock_quantity(), $product ),
 						wc_format_stock_quantity_for_display( $products_qty_in_cart[ $product->get_stock_managed_by_id() ], $product )
 					),
-					array( 'status' => 500 )
+					[ 'status' => 500 ]
 				);
 			}
 		}
@@ -499,18 +509,18 @@ class Wc_Cart {
 			}
 		}
 
-		return new WP_Error( 'wc_next_rest_cannot_add_to_cart', sprintf( __( 'You cannot add "%s" to your cart.', 'wc-next-app' ), $product->get_name() ), array( 'status' => 500 ) );
+		return new WP_Error( 'wc_next_rest_cannot_add_to_cart', sprintf( __( 'You cannot add "%s" to your cart.', 'headless-cms' ), $product->get_name() ), [ 'status' => 500 ] );
 	}
 
 	/**
 	 * Prepare cart item
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param array            $cart_item
 	 * @param \WP_REST_Request $request
 	 *
 	 * @return array
+	 * @since 1.0.0
+	 *
 	 */
 	protected function prepare_cart_item_for_response( $cart_item, $request ) {
 		$product = $cart_item['data'];
@@ -530,15 +540,15 @@ class Wc_Cart {
 	/**
 	 * Get the images for a product or product variation.
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param WC_Product|WC_Product_Variation $product Product instance.
 	 *
 	 * @return array
+	 * @since 1.0.0
+	 *
 	 */
 	protected function get_images( $product ) {
-		$images         = array();
-		$attachment_ids = array();
+		$images         = [];
+		$attachment_ids = [];
 
 		// Add featured image.
 		if ( $product->get_image_id() ) {
@@ -560,22 +570,22 @@ class Wc_Cart {
 				continue;
 			}
 
-			$images[] = array(
+			$images[] = [
 				'id'   => (int) $attachment_id,
 				'src'  => current( $attachment ),
 				'name' => get_the_title( $attachment_id ),
 				'alt'  => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
-			);
+			];
 		}
 
 		// Set a placeholder image if the product has no images set.
 		if ( empty( $images ) ) {
-			$images[] = array(
+			$images[] = [
 				'id'   => 0,
 				'src'  => wc_placeholder_img_src(),
-				'name' => __( 'Placeholder', 'wc-next-app' ),
-				'alt'  => __( 'Placeholder', 'wc-next-app' ),
-			);
+				'name' => __( 'Placeholder', 'headless-cms' ),
+				'alt'  => __( 'Placeholder', 'headless-cms' ),
+			];
 		}
 
 		return $images;
@@ -584,9 +594,10 @@ class Wc_Cart {
 	/**
 	 * Add response header
 	 *
+	 * @param \WP_REST_Response $response
+	 *
 	 * @since 1.0.0
 	 *
-	 * @param \WP_REST_Response $response
 	 */
 	protected function add_headers( $response ) {
 		wc()->cart->calculate_totals();
@@ -597,7 +608,7 @@ class Wc_Cart {
 		$wc_session_id = null;
 		$headers       = headers_list();
 
-		foreach( $headers as $header ) {
+		foreach ( $headers as $header ) {
 			if ( 0 === strpos( $header, 'Set-Cookie: wp_woocommerce_session_' ) ) {
 				preg_match_all( '/Set-Cookie: wp_woocommerce_session_(.*?)=(.*?);/', $header, $matches );
 
@@ -615,21 +626,21 @@ class Wc_Cart {
 	/**
 	 * Validate product
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param mixed            $value
 	 * @param \WP_REST_Request $request
 	 * @param string           $param
 	 *
 	 * @return bool
+	 * @since 1.0.0
+	 *
 	 */
 	public function is_valid_product( $value, $request, $param ) {
 		if ( ! is_integer( $value ) ) {
-			return new WP_Error( 'rest_invalid_product_id', sprintf( __( 'Invalid %s.', 'wc-next-app' ), $param ) );
+			return new WP_Error( 'rest_invalid_product_id', sprintf( __( 'Invalid %s.', 'headless-cms' ), $param ) );
 		}
 
 		if ( empty( absint( $request['product_id'] ) ) && empty( absint( $request['variation_id'] ) ) ) {
-			return new WP_Error( 'rest_invalid_data', __( 'product_id or variation_id is required.', 'wc-next-app' ) );
+			return new WP_Error( 'rest_invalid_data', __( 'product_id or variation_id is required.', 'headless-cms' ) );
 		}
 
 		$product_id = absint( $value );
@@ -644,29 +655,29 @@ class Wc_Cart {
 			return true;
 		}
 
-		return new WP_Error( 'rest_invalid_product', sprintf( __( '%s does not exist.', 'wc-next-app' ), $param ) );
+		return new WP_Error( 'rest_invalid_product', sprintf( __( '%s does not exist.', 'headless-cms' ), $param ) );
 	}
 
 	/**
 	 * Validate product quantity
-	 *
-	 * @since 1.0.0
 	 *
 	 * @param mixed            $value
 	 * @param \WP_REST_Request $request
 	 * @param string           $param
 	 *
 	 * @return bool|\WP_Error
+	 * @since 1.0.0
+	 *
 	 */
 	public function is_valid_quantity( $value, $request, $param ) {
 		if ( ! is_integer( $value ) ) {
-			return new WP_Error( 'rest_invalid_quantity', __( 'quantity is not numeric.', 'wc-next-app' ) );
+			return new WP_Error( 'rest_invalid_quantity', __( 'quantity is not numeric.', 'headless-cms' ) );
 		}
 
 		$value = absint( $value );
 
 		if ( $value < 0 ) {
-			return new WP_Error( 'rest_invalid_quantity', __( 'quntity must be equal or greater than 0.', 'wc-next-app' ) );
+			return new WP_Error( 'rest_invalid_quantity', __( 'quntity must be equal or greater than 0.', 'headless-cms' ) );
 		}
 
 		return true;
@@ -675,36 +686,36 @@ class Wc_Cart {
 	/**
 	 * Validate a cart item
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param string           $key
 	 * @param \WP_REST_Request $request
 	 * @param string           $param
 	 *
 	 * @return bool
+	 * @since 1.0.0
+	 *
 	 */
 	public function is_valid_cart_item( $key, $request, $param ) {
 		if ( wc()->cart->is_empty() ) {
-			return new WP_Error( 'wc_next_rest_empty_cart', __( "You don't have any item in your cart.", 'wc-next-app' ) );
+			return new WP_Error( 'wc_next_rest_empty_cart', __( "You don't have any item in your cart.", 'headless-cms' ) );
 		}
 
 		if ( wc()->cart->get_cart_item( $key ) ) {
 			return true;
 		}
 
-		return new WP_Error( 'wc_next_rest_invalid_cart_item_key', __( 'Invalid cart item key.', 'wc-next-app' ) );
+		return new WP_Error( 'wc_next_rest_invalid_cart_item_key', __( 'Invalid cart item key.', 'headless-cms' ) );
 	}
 
 	/**
 	 * Validate a trashed cart item
-	 *
-	 * @since 1.0.0
 	 *
 	 * @param string           $key
 	 * @param \WP_REST_Request $request
 	 * @param string           $param
 	 *
 	 * @return bool
+	 * @since 1.0.0
+	 *
 	 */
 	public function is_valid_removed_cart_item( $key, $request, $param ) {
 		$removed_items = wc()->cart->get_removed_cart_contents();
@@ -713,24 +724,24 @@ class Wc_Cart {
 			return true;
 		}
 
-		return new WP_Error( 'wc_next_rest_invalid_trashed_item_key', __( 'Cart item not found in removed items.', 'wc-next-app' ) );
+		return new WP_Error( 'wc_next_rest_invalid_trashed_item_key', __( 'Cart item not found in removed items.', 'headless-cms' ) );
 	}
 
 	/**
 	 * Clear cart
 	 *
+	 * @return \WP_REST_Response|\WP_Error
 	 * @since 1.0.0
 	 *
-	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function clear_cart() {
 		wc()->cart->empty_cart();
-		wc()->session->set( 'cart', array() );
+		wc()->session->set( 'cart', [] );
 
 		if ( ! wc()->cart->is_empty() ) {
-			return new WP_Error( 'wc_next_rest_clear_cart_failed', __( 'Clearing the cart failed!', 'wc-next-app' ), array( 'status' => 500 ) );
+			return new WP_Error( 'wc_next_rest_clear_cart_failed', __( 'Clearing the cart failed!', 'headless-cms' ), [ 'status' => 500 ] );
 		} else {
-			$response = rest_ensure_response( array() );
+			$response = rest_ensure_response( [] );
 			$response = $this->add_headers( $response );
 
 			return $response;
@@ -740,11 +751,11 @@ class Wc_Cart {
 	/**
 	 * Update a cart item
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param \WP_REST_Request $request
 	 *
 	 * @return \WP_REST_Response|\WP_Error
+	 * @since 1.0.0
+	 *
 	 */
 	public function update_item( $request ) {
 		$cart_item_key = $request['key'];
@@ -771,31 +782,31 @@ class Wc_Cart {
 				do_action( 'wc_next_rest_item_quantity_changed', $cart_item_key, $new_data );
 			}
 
-			$data     = ! empty( $new_data ) ? $this->prepare_cart_item_for_response( $new_data, $request ) : array();
+			$data     = ! empty( $new_data ) ? $this->prepare_cart_item_for_response( $new_data, $request ) : [];
 			$response = rest_ensure_response( $data );
 			$response = $this->add_headers( $response );
 
 			// Return response based on product quantity increment.
 			if ( $quantity > $current_data['quantity'] ) {
 				$status = 'increased';
-			} else if ( $quantity < $current_data['quantity'] ) {
+			} elseif ( $quantity < $current_data['quantity'] ) {
 				$status = 'decreased';
 			} else {
 				$status = 'unchanged';
 			}
 
-			$quantity_status = json_encode( array(
+			$quantity_status = json_encode( [
 				'status'            => $status,
 				'previous_quantity' => $current_data['quantity'],
 				'new_quantity'      => $quantity,
-			) );
+			] );
 
 			$response->header( 'X-WC-Cart-ItemQuantity', $quantity_status );
 
 			return $response;
 
 		} else {
-			return new WP_Error( 'wc_next_rest_can_not_update_item', __( 'Unable to update item quantity in cart.', 'wc-next-app' ), array( 'status' => 500 ) );
+			return new WP_Error( 'wc_next_rest_can_not_update_item', __( 'Unable to update item quantity in cart.', 'headless-cms' ), [ 'status' => 500 ] );
 		}
 	}
 
@@ -803,14 +814,14 @@ class Wc_Cart {
 	 * Checks if the product in the cart has enough stock
 	 * before updating the quantity.
 	 *
-	 * @since  1.0.0
-	 *
-	 * @param  array  $current_data
-	 * @param  string $quantity
+	 * @param array  $current_data
+	 * @param string $quantity
 	 *
 	 * @return bool|WP_Error
+	 * @since  1.0.0
+	 *
 	 */
-	protected function has_enough_stock( $current_data = array(), $quantity = 1 ) {
+	protected function has_enough_stock( $current_data = [], $quantity = 1 ) {
 		$product_id      = ! isset( $current_data['product_id'] ) ? 0 : absint( $current_data['product_id'] );
 		$variation_id    = ! isset( $current_data['variation_id'] ) ? 0 : absint( $current_data['variation_id'] );
 		$current_product = wc_get_product( $variation_id ? $variation_id : $product_id );
@@ -821,11 +832,11 @@ class Wc_Cart {
 			return new WP_Error(
 				'wc_next_rest_not_enough_in_stock',
 				sprintf(
-					__( 'You cannot add that amount of &quot;%1$s&quot; to the cart because there is not enough stock (%2$s remaining).', 'wc-next-app' ),
+					__( 'You cannot add that amount of &quot;%1$s&quot; to the cart because there is not enough stock (%2$s remaining).', 'headless-cms' ),
 					$current_product->get_name(),
 					wc_format_stock_quantity_for_display( $current_product->get_stock_quantity(), $current_product )
 				),
-				array( 'status' => 500 )
+				[ 'status' => 500 ]
 			);
 		}
 
@@ -835,17 +846,17 @@ class Wc_Cart {
 	/**
 	 * Delete/Remove a cart item
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param \WP_REST_Request $request
 	 *
 	 * @return \WP_REST_Response
+	 * @since 1.0.0
+	 *
 	 */
 	public function delete_item( $request ) {
 		$cart_item = wc()->cart->get_cart_item( $request['key'] );
 
 		if ( ! wc()->cart->remove_cart_item( $request['key'] ) ) {
-			return new WP_Error( 'wc_cart_rest_can_not_remove_item', __( 'Unable to remove item from cart.', 'wc-next-app' ), array( 'status' => 500 ) );
+			return new WP_Error( 'wc_cart_rest_can_not_remove_item', __( 'Unable to remove item from cart.', 'headless-cms' ), [ 'status' => 500 ] );
 		}
 
 		$data     = $this->prepare_cart_item_for_response( $cart_item, $request );
@@ -858,15 +869,15 @@ class Wc_Cart {
 	/**
 	 * Restore a cart item
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param \WP_REST_Request $request
 	 *
 	 * @return \WP_REST_Response
+	 * @since 1.0.0
+	 *
 	 */
 	public function restore_item( $request ) {
 		if ( ! wc()->cart->restore_cart_item( $request['key'] ) ) {
-			return new WP_Error( 'wc_cart_rest_can_not_restore_item', __( 'Unable to restore cart item.', 'wc-next-app' ), array( 'status' => 500 ) );
+			return new WP_Error( 'wc_cart_rest_can_not_restore_item', __( 'Unable to restore cart item.', 'headless-cms' ), [ 'status' => 500 ] );
 		}
 
 		$cart_item = wc()->cart->get_cart_item( $request['key'] );
@@ -891,11 +902,11 @@ class Wc_Cart {
 	 *
 	 * ATTENTION: Intentionally keep original code from WooCommerce
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $items Request items.
 	 *
 	 * @return bool|WP_Error
+	 * @since 1.0.0
+	 *
 	 */
 	protected function check_batch_limit( $items ) {
 		$limit = apply_filters( 'woocommerce_rest_batch_items_limit', 100, $this->get_normalized_rest_base() );
@@ -915,7 +926,7 @@ class Wc_Cart {
 
 		if ( $total > $limit ) {
 			/* translators: %s: items limit */
-			return new WP_Error( 'woocommerce_rest_request_entity_too_large', sprintf( __( 'Unable to accept more than %s items for this request.', 'wc-next-app' ), $limit ), array( 'status' => 413 ) );
+			return new WP_Error( 'woocommerce_rest_request_entity_too_large', sprintf( __( 'Unable to accept more than %s items for this request.', 'headless-cms' ), $limit ), [ 'status' => 413 ] );
 		}
 
 		return true;
@@ -924,11 +935,11 @@ class Wc_Cart {
 	/**
 	 * Bulk create, update and delete items.
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 *
 	 * @return array Of WP_Error or WP_REST_Response.
+	 * @since 1.0.0
+	 *
 	 */
 	public function batch_items( $request ) {
 		/**
@@ -940,7 +951,7 @@ class Wc_Cart {
 
 		// Get the request params.
 		$items    = array_filter( $request->get_params() );
-		$response = array();
+		$response = [];
 
 		// Check batch limit.
 		$limit = $this->check_batch_limit( $items );
@@ -953,7 +964,7 @@ class Wc_Cart {
 				$_item = new WP_REST_Request( 'POST' );
 
 				// Default parameters.
-				$defaults = array();
+				$defaults = [];
 				$schema   = $this->get_public_item_schema();
 				foreach ( $schema['properties'] as $arg => $options ) {
 					if ( isset( $options['default'] ) ) {
@@ -967,14 +978,14 @@ class Wc_Cart {
 				$_response = $this->create_item( $_item );
 
 				if ( is_wp_error( $_response ) ) {
-					$response['create'][] = array(
+					$response['create'][] = [
 						'id'    => 0,
-						'error' => array(
+						'error' => [
 							'code'    => $_response->get_error_code(),
 							'message' => $_response->get_error_message(),
 							'data'    => $_response->get_error_data(),
-						),
-					);
+						],
+					];
 				} else {
 					$response['create'][] = $wp_rest_server->response_to_data( $_response, '' );
 				}
@@ -988,14 +999,14 @@ class Wc_Cart {
 				$_response = $this->update_item( $_item );
 
 				if ( is_wp_error( $_response ) ) {
-					$response['update'][] = array(
+					$response['update'][] = [
 						'id'    => $item['id'],
-						'error' => array(
+						'error' => [
 							'code'    => $_response->get_error_code(),
 							'message' => $_response->get_error_message(),
 							'data'    => $_response->get_error_data(),
-						),
-					);
+						],
+					];
 				} else {
 					$response['update'][] = $wp_rest_server->response_to_data( $_response, '' );
 				}
@@ -1012,22 +1023,22 @@ class Wc_Cart {
 
 				$_item = new WP_REST_Request( 'DELETE' );
 				$_item->set_query_params(
-					array(
+					[
 						'id'    => $id,
 						'force' => true,
-					)
+					]
 				);
 				$_response = $this->delete_item( $_item );
 
 				if ( is_wp_error( $_response ) ) {
-					$response['delete'][] = array(
+					$response['delete'][] = [
 						'id'    => $id,
-						'error' => array(
+						'error' => [
 							'code'    => $_response->get_error_code(),
 							'message' => $_response->get_error_message(),
 							'data'    => $_response->get_error_data(),
-						),
-					);
+						],
+					];
 				} else {
 					$response['delete'][] = $wp_rest_server->response_to_data( $_response, '' );
 				}
