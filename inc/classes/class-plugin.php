@@ -7,6 +7,7 @@
 
 namespace Headless_CMS\Features\Inc;
 
+use Headless_CMS\Features\Inc\Api\API_Settings;
 use Headless_CMS\Features\Inc\Api\Get_Post;
 use Headless_CMS\Features\Inc\Api\Get_Posts;
 use Headless_CMS\Features\Inc\Api\Header_Footer_Api;
@@ -45,6 +46,7 @@ class Plugin {
 		Settings::get_instance();
 
 		// Apis.
+		API_Settings::get_instance();
 		Get_Post::get_instance();
 		Get_Posts::get_instance();
 		Header_Footer_Api::get_instance();
