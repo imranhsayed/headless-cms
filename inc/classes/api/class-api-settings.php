@@ -31,8 +31,10 @@ class API_Settings {
 	protected function setup_hooks() {
 
 		add_filter( 'rest_url', [ $this, 'force_update_rest_url' ] );
+
 		add_action( 'determine_current_user', [ $this, 'update_site_and_home_url' ], 1, 1 );
 		add_action( 'determine_current_user', [ $this, 'reset_site_and_home_url' ], 20, 1 );
+
 	}
 
 	function update_site_and_home_url( $user_id ) {
@@ -44,7 +46,8 @@ class API_Settings {
 	}
 
 	function update_urls( $url, $path ) {
-		$url = 'http://localhost:8888';
+
+		$url = get_option('siteurl');
 
 		return $url . $path;
 	}
