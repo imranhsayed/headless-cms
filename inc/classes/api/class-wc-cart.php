@@ -42,15 +42,6 @@ class Wc_Cart {
 		$this->setup_hooks();
 	}
 
-	public function customize_rest_cors() {
-		remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
-		add_filter( 'rest_pre_serve_request', function ( $value ) {
-			header( 'Access-Control-Allow-Origin: http://localhost:3000' );
-			header( 'Access-Control-Allow-Headers: X-WC-Session, X-Headless-CMS, Content-Type, Authorization' );
-			header( 'Access-Control-Expose-Headers: X-WC-Session, X-Headless-CMS, X-WC-Cart-Totals, X-WC-Cart-TotalItems, X-WP-Total, X-WP-TotalPages', false );
-		} );
-	}
-
 	/**
 	 * To setup action/filter.
 	 *
@@ -65,6 +56,26 @@ class Wc_Cart {
 		add_action( 'rest_api_init', [ $this, 'rest_posts_endpoints' ] );
 		add_filter( 'rest_pre_dispatch', [ $this, 'check_rest_response' ], 10, 3 );
 
+	}
+
+	/**
+	 * Customize Rest Cores.
+	 */
+	public function customize_rest_cors() {
+		remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
+		add_filter( 'rest_pre_serve_request', [ $this, 'set_pre_serve_request_headers' ] );
+	}
+
+	public function set_pre_serve_request_headers( $value ) {
+
+		// Get Allowed Origin Header Value.
+		$hcms_plugin_options         = get_option( 'hcms_plugin_options' );
+		$allowed_origin              = ! empty( $hcms_plugin_options['frontend_site_url'] ) ? $hcms_plugin_options['frontend_site_url'] : '*';
+		$access_control_allow_origin = sprintf( 'Access-Control-Allow-Origin: %s', $allowed_origin );
+
+		header( $access_control_allow_origin );
+		header( 'Access-Control-Allow-Headers: X-WC-Session, X-Headless-CMS, Content-Type, Authorization' );
+		header( 'Access-Control-Expose-Headers: X-WC-Session, X-Headless-CMS, X-WC-Cart-Totals, X-WC-Cart-TotalItems, X-WP-Total, X-WP-TotalPages', false );
 	}
 
 	/**

@@ -20,6 +20,7 @@ class API_Settings {
 	 * Construct method.
 	 */
 	protected function __construct() {
+		$this->add_cookie_path_constant();
 		$this->setup_hooks();
 	}
 
@@ -114,6 +115,21 @@ class API_Settings {
 	 */
 	public function force_update_rest_url( $url ) {
 		return str_replace( get_home_url(), get_site_url(), $url );
+	}
+
+	/**
+	 * Adds the COOKIEPATH constant with SameSite=None
+	 *
+	 * This is to allow the cookies to be set on the frontend application,
+	 * if the frontend application is on a different domain, else you they
+	 * don't get set because of cross-domain. This is required for cart session functionality.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite#samesitenone_requires_secure
+	 */
+	public function add_cookie_path_constant() {
+		if ( ! defined( 'COOKIEPATH' ) ) {
+			define( COOKIEPATH, '/;SameSite=None' );
+		}
 	}
 
 }
