@@ -61,6 +61,8 @@ class API_Settings {
 	 * At that point, the correct site url is not available. So we modify the URL to the backend url and then
 	 * later reset it back after the function completes it's work.
 	 *
+	 * @see https://github.com/woocommerce/woocommerce/blob/0c44ab857a9b041727ab8c16fd182ee9b700818e/includes/class-wc-rest-authentication.php#L390
+	 *
 	 * @param int $user_id User ID.
 	 *
 	 * @return mixed
