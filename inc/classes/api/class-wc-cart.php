@@ -544,6 +544,7 @@ class Wc_Cart {
 
 		$cart_item['data']           = $product->get_data();
 		$cart_item['data']['images'] = $this->get_images( $product );
+		$cart_item['currency']       = html_entity_decode( get_woocommerce_currency_symbol() );
 
 		return $cart_item;
 	}
