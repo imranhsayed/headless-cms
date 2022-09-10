@@ -223,6 +223,10 @@ query GET_WISHLIST {
 * Get the header data ( site title, site description , site logo URL, menu items ) and footer data ( footer menu items, social icons )
 * `http://example.com/wp-json/rae/v1/header-footer?header_location_id=hcms-menu-header&footer_location_id=hcms-menu-footer`
 
+## Get WooCommerce Country and states ( GET Request )
+- `/wp-json/rae/v1/wc/countries/`
+- `/wp-json/rae/v1/wc/states?countryCode=IN`
+
 ## Contributing :busts_in_silhouette:
 
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
