@@ -15,6 +15,7 @@ use Headless_CMS\Features\Inc\Api\Home_Page;
 use Headless_CMS\Features\Inc\Api\Wc_Cart;
 use Headless_CMS\Features\Inc\Api\Post_By_Tax;
 use Headless_CMS\Features\Inc\Api\Wc_Countries;
+use Headless_CMS\Features\Inc\Api\Wc_States;
 use Headless_CMS\Features\Inc\Mutations\Add_Wishlist;
 use Headless_CMS\Features\Inc\Mutations\Delete_Wishlist;
 use Headless_CMS\Features\Inc\Queries\Get_Wishlist;
@@ -55,6 +56,7 @@ class Plugin {
 		Post_By_Tax::get_instance();
 		Wc_Cart::get_instance();
 		Wc_Countries::get_instance();
+		Wc_States::get_instance();
 
 		// Queries.
 		Header_Footer_Schema::get_instance();

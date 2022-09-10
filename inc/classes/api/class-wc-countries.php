@@ -12,7 +12,7 @@ use Headless_CMS\Features\Inc\Traits\Singleton;
 use \WP_REST_Server;
 
 /**
- * Class Header_Footer_Api
+ * Class Wc_Countries
  */
 class Wc_Countries {
 
@@ -59,6 +59,7 @@ class Wc_Countries {
 	 */
 	public function register_rest_api_endpoints() {
 
+		// e.g. http://example.com/wp-json/rae/v1/wc/countries
 		register_rest_route(
 			$this->namespace,
 			'/' . $this->rest_base,
@@ -107,6 +108,13 @@ class Wc_Countries {
 		return rest_ensure_response( $data );
 	}
 
+	/**
+	 * Get Formatted Countries.
+	 *
+	 * @param $countries
+	 *
+	 * @return array
+	 */
 	public function get_formatted_countries( $countries ) {
 
 		$formatted_countries = [];
