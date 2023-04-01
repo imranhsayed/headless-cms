@@ -7,7 +7,7 @@
  * Author URI:  https://codeytek.com
  * License:     GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Version:     2.0.2
+ * Version:     2.0.3
  * Text Domain: headless-cms
  *
  * @package headless-cms
