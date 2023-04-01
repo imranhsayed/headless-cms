@@ -127,6 +127,9 @@ class Get_Post {
 		$post_data['title']            = get_the_title( $post_ID );
 		$post_data['excerpt']          = get_the_excerpt( $post_ID );
 		$post_data['date']             = get_the_date( '', $post_ID );
+		$post_data['slug']             = get_post_field( 'post_name', $post_ID );
+		$post_data['permalink']        = get_the_permalink( $post_ID );
+		$post_data['content']          = get_post_field( 'post_content', $post_ID );
 		$post_data['attachment_image'] = [
 			'img_sizes'  => wp_get_attachment_image_sizes( $attachment_id ),
 			'img_src'    => wp_get_attachment_image_src( $attachment_id, 'full' ),
@@ -136,6 +139,7 @@ class Get_Post {
 		$post_data['meta']             = [
 			'author_id'   => $author_id,
 			'author_name' => get_the_author_meta( 'display_name', $author_id ),
+			'author_url'  => get_author_posts_url( $author_id ),
 		];
 
 
