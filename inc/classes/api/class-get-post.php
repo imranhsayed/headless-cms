@@ -11,7 +11,7 @@ use Headless_CMS\Features\Inc\Traits\Singleton;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use WP_Query;
+use WP_Post;
 
 /**
  * Class Get_Post
@@ -49,11 +49,12 @@ class Get_Post {
 		/**
 		 * Handle Posts Request: GET Request
 		 *
-		 * This endpoint takes 'page_no' in query params of the request.
+		 * This endpoint takes 'post_id' or 'post_slug' in query params of the request.
 		 * Returns the posts data object on success
 		 * Also handles error by returning the relevant error.
 		 *
 		 * Example: http://example.com/wp-json/rae/v1/post?post_id=1
+		 * http://example.com/wp-json/rae/v1/post?post_slug=hello-world
 		 */
 		register_rest_route(
 			'rae/v1',
@@ -79,9 +80,16 @@ class Get_Post {
 		$response   = [];
 		$parameters = $request->get_params();
 		$post_id    = ! empty( $parameters['post_id'] ) ? intval( sanitize_text_field( $parameters['post_id'] ) ) : '';
+		$post_slug  = ! empty( $parameters['post_slug'] ) ? sanitize_text_field( $parameters['post_slug'] ) : '';
 
 		// Error Handling.
 		$error = new WP_Error();
+
+		// Get id from slug
+		if ( ! empty( $post_slug ) ) {
+			$the_post = get_page_by_path( $post_slug, OBJECT, 'post' );
+			$post_id = $the_post instanceof WP_Post ? $the_post->ID : $post_id;
+		}
 
 		$post_data = $this->get_required_post_data( $post_id );
 
