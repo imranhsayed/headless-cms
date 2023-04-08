@@ -37,6 +37,15 @@ class Settings {
 		 */
 		add_action( 'admin_menu', [ $this, 'add_settings_page' ] );
 
+		// Get plugin settings.
+		$plugin_settings          = get_option( 'hcms_plugin_options' );
+		$allow_anonymous_comments = is_array( $plugin_settings ) && ! empty( $plugin_settings['allow_anonymous_comments'] ) ? $plugin_settings['allow_anonymous_comments'] : false;
+
+		// If $allow_anonymous_comments is checked, then allow users to post comments without logging-in via REST API.
+		if ( ! empty( $allow_anonymous_comments ) ) {
+			add_filter( 'rest_allow_anonymous_comments', '__return_true' );
+		}
+
 	}
 
 	/**
