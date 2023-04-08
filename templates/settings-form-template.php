@@ -19,21 +19,21 @@
 		settings_fields( 'hcms-plugin-settings-group' );
 		do_settings_sections( 'hcms-plugin-settings-group' );
 		$option_val_array = get_option( 'hcms_plugin_options' );
-		
+
 		headless_cms_get_template_part(
 			'templates/frontend-site-details-section',
 			[
 				'option_val_array' => $option_val_array,
 			]
 		);
-		
+
 		headless_cms_get_template_part(
 			'templates/post-preview-section',
 			[
 				'option_val_array' => $option_val_array,
 			]
 		);
-		
+
 		headless_cms_get_template_part(
 			'templates/hero-section',
 			[
@@ -57,6 +57,13 @@
 
 		headless_cms_get_template_part(
 			'templates/latest-posts-section',
+			[
+				'option_val_array' => $option_val_array,
+			]
+		);
+
+		headless_cms_get_template_part(
+			'templates/comments-section',
 			[
 				'option_val_array' => $option_val_array,
 			]
