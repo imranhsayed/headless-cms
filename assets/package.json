@@ -48,7 +48,7 @@
 		"sass-mq": "^5.0.0",
 		"serialize-javascript": "^3.1.0",
 		"style-loader": "^0.23.1",
-		"stylelint": "^9.6.0",
+		"stylelint": "^15.10.1",
 		"stylelint-config-wordpress": "^13.1.0",
 		"stylelint-webpack-plugin": "^0.10.5",
 		"uglifyjs-webpack-plugin": "^2.0.1",
