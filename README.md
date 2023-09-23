@@ -20,9 +20,6 @@ composer require imranhsayed/headless-cms
 
 - [https://packagist.org/packages/imranhsayed/headless-cms](https://packagist.org/packages/imranhsayed/headless-cms)
 
-## Install from WordPress.org
-
-Download and activate plugin from [WordPress.org](https://wordpress.org/plugins/headless-cms/)
 
 ## Maintainer
 
