@@ -80,7 +80,7 @@ class Get_Posts {
 		$response      = [];
 		$parameters    = $request->get_params();
 		$posts_page_no = ! empty( $parameters['page_no'] ) ? intval( sanitize_text_field( $parameters['page_no'] ) ) : '';
-        $category_slug = ! empty( $parameters['category'] ) ? sanitize_text_field( $request->get_query_params()['category'] ) : '';
+        $category_slug = ! empty( $parameters['category'] ) ? sanitize_text_field( $parameters['category'] ) : '';
 
 		// Error Handling.
 		$error = new WP_Error();
