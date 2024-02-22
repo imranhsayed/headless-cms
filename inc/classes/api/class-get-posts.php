@@ -80,11 +80,12 @@ class Get_Posts {
 		$response      = [];
 		$parameters    = $request->get_params();
 		$posts_page_no = ! empty( $parameters['page_no'] ) ? intval( sanitize_text_field( $parameters['page_no'] ) ) : '';
+        $category_slug = ! empty( $parameters['category'] ) ? sanitize_text_field( $request->get_query_params()['category'] ) : '';
 
 		// Error Handling.
 		$error = new WP_Error();
 
-		$posts_data = $this->get_posts( $posts_page_no );
+		$posts_data = $this->get_posts( $posts_page_no, $category_slug );
 
 		// If posts found.
 		if ( ! empty( $posts_data['posts_data'] ) ) {
@@ -124,10 +125,12 @@ class Get_Posts {
 	 * Get posts data.
 	 *
 	 * @param integer $page_no page no.
+     *
+     * @param string $category category slug
 	 *
 	 * @return array Posts.
 	 */
-	public function get_posts( $page_no = 1 ) {
+	public function get_posts( $page_no = 1, $category = "" ) {
 
 		$args = [
 			'post_type'              => $this->post_type,
@@ -138,6 +141,7 @@ class Get_Posts {
 			'paged'                  => $page_no,
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
+            'category_name'          => $category,
 
 		];
 
