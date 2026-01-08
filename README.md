@@ -241,3 +241,10 @@ I use [Git](https://github.com/) for versioning.
 ![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)
 
 - **[GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)**
+
+## Custom Enhancements
+
+- Added a secure REST API endpoint to fetch posts
+- Implemented role-based access control using permission_callback
+- Endpoint: /wp-json/headless/v1/secure-posts
+

@@ -34,3 +34,22 @@ function headless_cms_features_plugin_loader() {
 }
 
 headless_cms_features_plugin_loader();
+
+add_action( 'rest_api_init', function () {
+
+    register_rest_route( 'headless/v1', '/secure-posts', array(
+        'methods'  => 'GET',
+        'callback' => 'headless_get_secure_posts',
+        'permission_callback' => function () {
+            return current_user_can( 'edit_posts' );
+        },
+    ));
+
+});
+
+function headless_get_secure_posts() {
+    return get_posts( array(
+        'post_type'   => 'post',
+        'numberposts' => 5,
+    ));
+}
