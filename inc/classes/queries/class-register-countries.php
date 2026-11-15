@@ -75,14 +75,21 @@ class Register_Countries {
 				'type'        => 'WooCountries',
 				'resolve'     => function () {
 
-					// All countries for billing.
-					$all_countries     = class_exists( 'WooCommerce' ) ? WC()->countries : [];
-					$billing_countries = ! empty( $all_countries->countries ) ? $all_countries->countries : [];
+					$wc_countries = class_exists( 'WooCommerce' ) ? WC()->countries : null;
+
+					/**
+					 * All countries for billing.
+					 *
+					 * Read through get_countries() rather than the $countries
+					 * property: WooCommerce populates that property lazily, and
+					 * nothing has touched it during a GraphQL request, so reading
+					 * it directly returns an empty list.
+					 */
+					$billing_countries = $wc_countries ? $wc_countries->get_countries() : [];
 					$billing_countries = $this->get_formatted_countries( $billing_countries );
 
 					// All countries with states for shipping.
-					$shipping_countries = class_exists( 'WooCommerce' ) ? WC()->countries->get_shipping_countries() : [];;
-					$shipping_countries = ! empty( $shipping_countries ) ? $shipping_countries : [];
+					$shipping_countries = $wc_countries ? $wc_countries->get_shipping_countries() : [];
 					$shipping_countries = $this->get_formatted_countries( $shipping_countries );
 
 					/**
